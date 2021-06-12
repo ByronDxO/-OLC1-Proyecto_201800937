@@ -2,9 +2,6 @@ from Interprete.TS.Exception import Exception
 
 errores = []
 reservadas = {
-    'int'   : 'RINT',
-    'float' : 'RFLOAT',
-    'string': 'RSTRING',
     'print' : 'RPRINT',
     'true'  : 'RTRUE',
     'false' : 'RFALSE',
@@ -16,6 +13,9 @@ tokens  = [
     'PARC',
     'MAS',
     'MENOS',
+    'POR',
+    'DIV',
+    'POT',
     'DECIMAL',
     'ENTERO',
     'CADENA',
@@ -27,7 +27,10 @@ t_PUNTOCOMA     = r';'
 t_PARA          = r'\('
 t_PARC          = r'\)'
 t_MAS           = r'\+'
-t_MENOS           = r'-'
+t_MENOS         = r'-'
+t_POR           = r'\*'
+t_DIV           = r'\/'
+t_POT           = r'\*\*'
 
 def t_DECIMAL(t):
     r'\d+\.\d+'
@@ -136,11 +139,20 @@ def p_expresion_binaria(t):
     '''
     expresion : expresion MAS expresion
             | expresion MENOS expresion
+            | expresion POR expresion
+            | expresion DIV expresion
+            | expresion POT expresion
     '''
     if t[2] == '+':
         t[0] = Aritmetica(Operador_Aritmetico.SUMA, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '-':
         t[0] = Aritmetica(Operador_Aritmetico.RESTA, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '*':
+        t[0] = Aritmetica(Operador_Aritmetico.POR, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '/':
+        t[0] = Aritmetica(Operador_Aritmetico.DIV, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))   
+    elif t[2] == '**':
+        t[0] = Aritmetica(Operador_Aritmetico.DIV, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))   
 
 
 def p_expresion_entero(t):
