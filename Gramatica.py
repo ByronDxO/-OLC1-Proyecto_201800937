@@ -16,6 +16,16 @@ tokens  = [
     'POR',
     'DIV',
     'POT',
+    'MODULO',
+    'MENORQUE',
+    'MENORIGUAL',
+    'MAYORIGUAL',
+    'MAYORQUE',
+    'IGUALIGUAL',
+    'DIFERENCIA',
+    'AND',
+    'OR',
+    'NOT',
     'DECIMAL',
     'ENTERO',
     'CADENA',
@@ -31,6 +41,16 @@ t_MENOS         = r'-'
 t_POR           = r'\*'
 t_DIV           = r'\/'
 t_POT           = r'\*\*'
+t_MODULO        = r'\%'
+t_MENORQUE      = r'<'
+t_MENORIGUAL    = r'<='
+t_MAYORQUE      = r'>'
+t_MAYORIGUAL    = r'>='
+t_IGUALIGUAL    = r'=='
+t_AND           = r'&&'
+t_OR            = r'\|\|'
+t_NOT           = r'!'
+t_DIFERENCIA    = r'!='
 
 def t_DECIMAL(t):
     r'\d+\.\d+'
@@ -86,17 +106,28 @@ def find_column(inp, token):
 # Construyendo el analizador léxico
 import Interprete.ply.lex as lex
 lexer = lex.lex()
-
-
+# Asociacion
+precedence = (
+    ('left','OR'),
+    ('left','AND'),
+    ('right','UNOT'),
+    ('left','IGUALIGUAL','DIFERENCIA','MENORQUE','MENORIGUAL','MAYORQUE','MAYORIGUAL'),
+    ('left','MAS','MENOS'),
+    ('left','DIV','POR','MODULO'),
+    ('right','UMENOS'),
+    )
 
 # Definición de la gramática
 
 #Abstract
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.Instrucciones.Imprimir import Imprimir
-from Interprete.Expresiones.Primitivos import Primitivos
 from Interprete.TS.Tipo import *
+
+from Interprete.Expresiones.Primitivos import Primitivos
 from Interprete.Expresiones.Aritmetica import Aritmetica
+from Interprete.Expresiones.Relacional import Relacional
+from Interprete.Expresiones.Logica import Logica
 
 def p_init(t) :
     'init            : instrucciones'
@@ -142,6 +173,15 @@ def p_expresion_binaria(t):
             | expresion POR expresion
             | expresion DIV expresion
             | expresion POT expresion
+            | expresion MODULO expresion
+            | expresion MENORQUE expresion
+            | expresion MENORIGUAL expresion
+            | expresion MAYORQUE expresion
+            | expresion MAYORIGUAL expresion
+            | expresion IGUALIGUAL expresion
+            | expresion DIFERENCIA expresion
+            | expresion AND expresion
+            | expresion OR expresion
     '''
     if t[2] == '+':
         t[0] = Aritmetica(Operador_Aritmetico.SUMA, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
@@ -152,8 +192,37 @@ def p_expresion_binaria(t):
     elif t[2] == '/':
         t[0] = Aritmetica(Operador_Aritmetico.DIV, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))   
     elif t[2] == '**':
-        t[0] = Aritmetica(Operador_Aritmetico.DIV, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))   
+        t[0] = Aritmetica(Operador_Aritmetico.POTE, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '%':
+        t[0] = Aritmetica(Operador_Aritmetico.MODU, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))  
 
+    elif t[2] == '<':
+        t[0] = Relacional(Operador_Relacional.MENORQUE, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '<=':
+        t[0] = Relacional(Operador_Relacional.MENORIGUAL, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '>':
+        t[0] = Relacional(Operador_Relacional.MAYORQUE, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '>=':
+        t[0] = Relacional(Operador_Relacional.MAYORIGUAL, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '==':
+        t[0] = Relacional(Operador_Relacional.IGUALACION, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '!=':
+        t[0] = Relacional(Operador_Relacional.DIFERENCIA, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '&&':
+        t[0] = Logica(Operador_Logico.AND, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+    elif t[2] == '||':
+        t[0] = Logica(Operador_Logico.OR, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+   
+
+def p_expresion_unaria(t):
+    '''
+    expresion : MENOS expresion %prec UMENOS 
+            | NOT expresion %prec UNOT 
+    '''
+    if t[1] == '-':
+        t[0] = Aritmetica(Operador_Aritmetico.UMENOS, t[2],None, t.lineno(1), find_column(input, t.slice[1]))
+    # elif t[1] == '!':
+    #     t[0] = Relacional(Operador_Aelacional.NOT, t[2],None, t.lineno(1), find_column(input, t.slice[1]))
 
 def p_expresion_entero(t):
     '''expresion : ENTERO'''
@@ -169,8 +238,9 @@ def p_primitivo_cadena(t):
 
 
 def p_primitivo_boolean(t):
-    '''expresion : RTRUE
-                | RFALSE
+    '''
+    expresion : RTRUE
+            | RFALSE
     '''
     t[0] = Primitivos(Tipo.BOOLEANO,t[1], t.lineno(1), find_column(input, t.slice[1]))
 

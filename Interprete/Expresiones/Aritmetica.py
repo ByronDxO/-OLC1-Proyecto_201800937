@@ -1,3 +1,4 @@
+from re import A
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Exception import Exception
 from Interprete.TS.Tipo import Tipo, Operador_Aritmetico
@@ -142,6 +143,57 @@ class Aritmetica(Instruccion):
                 return round((self.obtenerVal(self.OperacionIzq.tipo, izq) / self.obtenerVal(self.OperacionDer.tipo, der)), 2)
            
             return Exception("Semantico", "Tipo Erroneo de operacion para /.", self.fila, self.columna)
+        
+
+        elif self.operador == Operador_Aritmetico.POTE:
+
+            if self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.ENTERO:                         # int ** int     = int
+                self.tipo = Tipo.ENTERO
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) ** self.obtenerVal(self.OperacionDer.tipo, der)
+            elif self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.DECIMAL:                      # int ** double  = double
+                self.tipo = Tipo.DECIMAL
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) ** self.obtenerVal(self.OperacionDer.tipo, der)
+            # DOUBLE
+            elif self.OperacionIzq.tipo == Tipo.DECIMAL and self.OperacionDer.tipo == Tipo.ENTERO:                       # doube ** int   = double
+                self.tipo = Tipo.DECIMAL
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) ** self.obtenerVal(self.OperacionDer.tipo, der) 
+            elif self.OperacionIzq.tipo == Tipo.DECIMAL and self.OperacionDer.tipo == Tipo.DECIMAL:                      # double ** double  = double
+                self.tipo = Tipo.DECIMAL
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) ** self.obtenerVal(self.OperacionDer.tipo, der)
+        
+            
+            return Exception("Semantico", "Tipo Erroneo de operacion para **.", self.fila, self.columna)
+
+        elif self.operador == Operador_Aritmetico.MODU:
+
+            if self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.ENTERO:                         # int % int     = double
+                self.tipo = Tipo.DECIMAL
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) % self.obtenerVal(self.OperacionDer.tipo, der)
+            elif self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.DECIMAL:                      # int % double  = double
+                self.tipo = Tipo.DECIMAL
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) % self.obtenerVal(self.OperacionDer.tipo, der)
+            # DOUBLE
+            elif self.OperacionIzq.tipo == Tipo.DECIMAL and self.OperacionDer.tipo == Tipo.ENTERO:                       # doube % int   = double
+                self.tipo = Tipo.DECIMAL
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) % self.obtenerVal(self.OperacionDer.tipo, der) 
+            elif self.OperacionIzq.tipo == Tipo.DECIMAL and self.OperacionDer.tipo == Tipo.DECIMAL:                      # double % double  = double
+                self.tipo = Tipo.DECIMAL
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) % self.obtenerVal(self.OperacionDer.tipo, der)
+              
+            return Exception("Semantico", "Tipo Erroneo de operacion para %.", self.fila, self.columna)
+
+        elif self.operador == Operador_Aritmetico.UMENOS: #NEGACION UNARIA
+            
+            if self.OperacionIzq.tipo == Tipo.ENTERO:
+                self.tipo = Tipo.ENTERO
+                return - self.obtenerVal(self.OperacionIzq.tipo, izq)
+            elif self.OperacionIzq.tipo == Tipo.DECIMAL:
+                self.tipo = Tipo.DECIMAL
+                return - self.obtenerVal(self.OperacionIzq.tipo, izq)
+            return Exception("Semantico", "Tipo Erroneo de operacion para - unario.", self.fila, self.columna)
+        
+        return Exception("Semantico", "Tipo de Operacion no Especificado.", self.fila, self.columna)
+
 
 
     def obtenerVal(self, tipo, val):
