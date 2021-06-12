@@ -8,7 +8,8 @@ from tkinter import ttk, Tk, Label, Menu, Button, Entry, StringVar, Scrollbar, F
 import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
-from tkinter import messagebox 
+from tkinter import messagebox
+
 
 class Ventana():
 
@@ -38,7 +39,7 @@ class Ventana():
         self.barra_menu.add_cascade(label="Archivo", menu=self.open_file)
         # ------------------------------------ HERRAMIENTAS ------------------------------------ 
         self.herramienta = Menu(self.barra_menu)
-        self.herramienta.add_command(label="Interpretar")
+        self.herramienta.add_command(label="Interpretar", command=self.interpretar)
         self.herramienta.add_command(label="Debugger")
 
 
@@ -63,13 +64,17 @@ class Ventana():
 
         self.editor = Label(self.root_window, text="Editor")
         self.editor.pack()
-        self.editor.place(x=1, y=1)
+        self.editor.place(x=20, y=1)
+
+        self.label_position = Label(self.root_window)
+        self.label_position.pack()
+        self.label_position.place(x=50, y=1)
 
         self.scroll = ScrollText(self.root_window) # aqui va el codigo fuente
         self.scroll.pack()
         self.scroll.place(x=50, y=25)
-        self.scroll.text.focus()
-        self.root_window.after(200, self.scroll.redraw())
+        #self.scroll.text.focus()
+        #self.root_window.after(200, self.scroll.redraw())
 
         
         self.scroll_consola = scrolledtext.ScrolledText(self.root_window, height=20, width=70) # consola
@@ -149,11 +154,27 @@ class Ventana():
             self.table_error.insert(parent='', index=i, iid=i, text='', values=(f'{i+1}',f'tipo{i}',f'des{i}',f'linea{i}',f'colu{i}'))
             i += 1
         """
-        self.table_error.pack()     
+        self.table_error.pack() 
+        # ----------------------------------- POSICION DEL MOUSE ----------------------------------
+       
+        self.scroll.text.bind("<Button-1>", self.get_posicion_mouse)
+        self.scroll.text.bind("<Button-2>", self.get_posicion_mouse)
+        self.scroll.text.bind("<Button-3>", self.get_posicion_mouse)
+        
         # ------------------------------------ FIN DE TK -------------------------------------------
 
         self.root_window.config(menu=self.barra_menu)
         self.root_window.mainloop()
+
+    ########################## POSICION ##########################
+
+    def get_posicion_mouse(self, *args, **kwargs):
+        position = self.scroll.text.index(INSERT)
+        self.label_position.destroy()
+        self.label_position = Label(self.root_window, text=f"{position}")
+        self.label_position.pack()
+        self.label_position.place(x=50, y=1)
+        
 
     # -------------------------------------------------------- ARCHIVO ------------------------------------------------------
 
@@ -214,7 +235,12 @@ class Ventana():
 
     # -------------------------------------------------------- HERRAMIENTAS ------------------------------------------------------
     def interpretar(self):
-        pass
+        #INTERFAZ
+        import Gramatica as prueba
+        print("aca es interprete")
+        print(prueba.ast.get_consola())
+
+
     def debugger(self):
         pass
 
@@ -281,7 +307,7 @@ class TextoLinea(tk.Canvas):
 
     def redraw(self, *args):
         self.delete("all")
-        i = self.textwidget.index("@0,0")
+        i = self.textwidget.index("@1,0")
         while True :
             dline= self.textwidget.dlineinfo(i)
             if dline is None: break
