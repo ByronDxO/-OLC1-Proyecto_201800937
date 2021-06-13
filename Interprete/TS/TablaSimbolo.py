@@ -37,15 +37,14 @@ class TablaSimbolo:
         tablaActual = self
         while tablaActual != None:
             if simbolo.id in tablaActual.tabla :
-                if tablaActual.tabla[simbolo.id].getTipo() == simbolo.getTipo():
-                    tablaActual.tabla[simbolo.id].setValor(simbolo.getValor())
-                    tablaActual.tabla[simbolo.id].setTipo(simbolo.getTipo())
+                if tablaActual.tabla[simbolo.id].get_tipo() == simbolo.get_tipo():
+                    tablaActual.tabla[simbolo.id].set_valor(simbolo.get_valor())
+                    tablaActual.tabla[simbolo.id].set_tipo(simbolo.get_tipo())
                     return None 
-                
-                return Exception("Semantico", "Tipo de dato Diferente en Asignacion", simbolo.getFila(), simbolo.getColumna()) 
+                return Exception("Semantico", "Tipo de dato Diferente en Asignacion", simbolo.get_fila(), simbolo.get_columna()) 
             else:
                 tablaActual = tablaActual.anterior
-        return Exception("Semantico", "Variable No encontrada en Asignacion", simbolo.getFila(), simbolo.getColumna())
+        return Exception("Semantico", "Variable No encontrada en Asignacion", simbolo.get_fila(), simbolo.get_columna())
         
         
     

@@ -3,6 +3,7 @@ from Interprete.TS.Exception import Exception
 errores = []
 reservadas = {
     'print' : 'RPRINT',
+    'var'   : 'RVAR',
     'true'  : 'RTRUE',
     'false' : 'RFALSE',
 }
@@ -11,6 +12,7 @@ tokens  = [
     'PUNTOCOMA',
     'PARA',
     'PARC',
+    'IGUAL',
     'MAS',
     'MENOS',
     'POR',
@@ -36,6 +38,7 @@ tokens  = [
 t_PUNTOCOMA     = r';'
 t_PARA          = r'\('
 t_PARC          = r'\)'
+t_IGUAL         = r'='
 t_MAS           = r'\+'
 t_MENOS         = r'-'
 t_POR           = r'\*'
@@ -85,6 +88,10 @@ def t_COMENTARIO_SIMPLE(t):
     r'\#.*\n'
     t.lexer.lineno += 1
 
+# def t_COMENTARIO_VARIAS_LINEAS(t):
+#     r'\#\ * (.|\n) * ?\*\#'
+#     t.lexer.lineo += t.value.count("\n")
+
 # Caracteres ignorados
 t_ignore = " \t"
 
@@ -121,13 +128,18 @@ precedence = (
 # Definición de la gramática
 
 #Abstract
+from Interprete.Instrucciones.Declaracion import Declaracion
+from Interprete.Instrucciones.Asignacion import Asignacion
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.Instrucciones.Imprimir import Imprimir
+
+
 from Interprete.TS.Tipo import *
 
 from Interprete.Expresiones.Primitivos import Primitivos
 from Interprete.Expresiones.Aritmetica import Aritmetica
 from Interprete.Expresiones.Relacional import Relacional
+from Interprete.Expresiones.Identificador import Identificador
 from Interprete.Expresiones.Logica import Logica
 
 def p_init(t) :
@@ -152,7 +164,10 @@ def p_instrucciones_instruccion(t) :
 # --------------------------------------------- INSTRUCCION ---------------------------------------------
 
 def p_instruccion(t) :
-    '''instruccion      : imprimir_ fin_instruccion'''
+    '''instruccion  : imprimir_ fin_instruccion
+                    | declaracion_ins fin_instruccion
+                    | asignacion_ins fin_instruccion
+    '''
     t[0] = t[1]
 
 def p_instruccion_error(t):
@@ -164,13 +179,36 @@ def p_fin_instruc(t) :
     '''fin_instruccion  : PUNTOCOMA
                         | '''
     t[0] = None
-#///////////////////////////////////////IMPRIMIR//////////////////////////////////////////////////
+# ------------------------------------------ DECLARACION ---------------------------------------------
+def p_declaracion_i(t):
+    '''declaracion_ins  : TIPO ID IGUAL expresion '''
+
+    t[0] = Declaracion(t[1], t[2], t.lineno(2), find_column(input, t.slice[2]), t[4])
+
+def p_solo_declaracion(t):
+    'declaracion_ins  : TIPO ID '
+
+    t[0] = Declaracion(t[1], t[2], t.lineno(2), find_column(input, t.slice[2]), None)
+
+# ------------------------------------------ DECLARACION ---------------------------------------------
+def p_asignacion_i(t):
+    'asignacion_ins    : ID IGUAL expresion '
+    t[0] = Asignacion(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
+# --------------------------------------------- IMPRIMIR ---------------------------------------------
 
 def p_imprimir(t) :
     'imprimir_   : RPRINT PARA expresion PARC'
     t[0] = Imprimir(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
-#///////////////////////////////////////EXPRESION//////////////////////////////////////////////////
+
+# --------------------------------------------- TIPO ---------------------------------------------
+def p_tipo_dato(t):
+    '''TIPO :  RVAR'''
+
+    if t[1] == 'var':
+        t[0] = Tipo.VAR
+
+# --------------------------------------------- EXPRESION ---------------------------------------------
 
 def p_expresion_binaria(t):
     '''
@@ -237,6 +275,10 @@ def p_expresion_agrupacion(t):
     '''
     t[0] = t[2]
 
+def p_expresion_identificador(t):
+    '''expresion : ID'''
+    t[0] = Identificador(t[1], t.lineno(1), find_column(input, t.slice[1]))
+
 def p_expresion_entero(t):
     '''expresion : ENTERO'''
     t[0] = Primitivos(Tipo.ENTERO,t[1], t.lineno(1), find_column(input, t.slice[1]))
@@ -249,13 +291,14 @@ def p_primitivo_cadena(t):
     '''expresion : CADENA'''
     t[0] = Primitivos(Tipo.CADENA,str(t[1]).replace('\\n', '\n'), t.lineno(1), find_column(input, t.slice[1]))
 
+def p_primitivo_true(t):
+    '''expresion : RTRUE'''
+    t[0] = Primitivos(Tipo.BOOLEANO, True, t.lineno(1), find_column(input, t.slice[1]))
 
-def p_primitivo_boolean(t):
-    '''
-    expresion : RTRUE
-            | RFALSE
-    '''
-    t[0] = Primitivos(Tipo.BOOLEANO,t[1], t.lineno(1), find_column(input, t.slice[1]))
+def p_primitivo_false(t):
+    '''expresion : RFALSE'''
+    t[0] = Primitivos(Tipo.BOOLEANO, False, t.lineno(1), find_column(input, t.slice[1]))
+
 
 import Interprete.ply.yacc as yacc
 parser = yacc.yacc()

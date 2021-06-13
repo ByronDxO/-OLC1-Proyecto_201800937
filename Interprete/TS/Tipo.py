@@ -5,10 +5,11 @@ class Tipo(Enum):
     ENTERO      = 1  # int
     DECIMAL     = 2  # double 
     BOOLEANO    = 3  # Boolean
-    CHAR    = 4  # char
+    CHAR        = 4  # char
     CADENA      = 5  # String
     NULO        = 6  # null
     ARREGLO     = 7  # []
+    VAR         = 8  # var
 
 
 class Operador_Aritmetico(Enum):
