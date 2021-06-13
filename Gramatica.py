@@ -31,7 +31,9 @@ tokens  = [
     'DECIMAL',
     'ENTERO',
     'CADENA',
-    'ID'
+    'ID',
+    'COMENTARIO_SIMPLE',
+    'COMENTARIO_VARIAS_LINEAS'
 ] + list(reservadas.values())
 
 # Tokens
@@ -83,14 +85,15 @@ def t_CADENA(t):
     t.value = t.value[1:-1] # remuevo las comillas
     return t
 
+def t_COMENTARIO_VARIAS_LINEAS(t):
+    r'\#\*(.|\n)*?\*\#'
+    t.lexer.lineno += t.value.count("\n") 
+
 # Comentario simple // ...
 def t_COMENTARIO_SIMPLE(t):
     r'\#.*\n'
     t.lexer.lineno += 1
-
-# def t_COMENTARIO_VARIAS_LINEAS(t):
-#     r'\#\ * (.|\n) * ?\*\#'
-#     t.lexer.lineo += t.value.count("\n")
+       
 
 # Caracteres ignorados
 t_ignore = " \t"
@@ -163,11 +166,20 @@ def p_instrucciones_instruccion(t) :
 
 # --------------------------------------------- INSTRUCCION ---------------------------------------------
 
-def p_instruccion(t) :
+def p_instruccion(t):
     '''instruccion  : imprimir_ fin_instruccion
-                    | declaracion_ins fin_instruccion
+                    | declaracion_ins
                     | asignacion_ins fin_instruccion
+                    | COMENTARIO_VARIAS_LINEAS
+                    | COMENTARIO_SIMPLE
+                    
     '''
+    t[0] = t[1]
+
+def p_decla(t):
+    ''' declaracion_ins : declaracion_ 
+                        | declaracion_comp'''
+        
     t[0] = t[1]
 
 def p_instruccion_error(t):
@@ -180,19 +192,19 @@ def p_fin_instruc(t) :
                         | '''
     t[0] = None
 # ------------------------------------------ DECLARACION ---------------------------------------------
-def p_declaracion_i(t):
-    '''declaracion_ins  : TIPO ID IGUAL expresion '''
+def p_declaracion_simple(t):
+    '''declaracion_  :  TIPO ID fin_instruccion'''
+    
+    t[0] = Declaracion(t[1], t[2], t.lineno(2), find_column(input, t.slice[2]))
+
+def p_declaracion_completa(t):
+    'declaracion_comp  : TIPO ID IGUAL expresion fin_instruccion'
 
     t[0] = Declaracion(t[1], t[2], t.lineno(2), find_column(input, t.slice[2]), t[4])
 
-def p_solo_declaracion(t):
-    'declaracion_ins  : TIPO ID '
-
-    t[0] = Declaracion(t[1], t[2], t.lineno(2), find_column(input, t.slice[2]), None)
-
-# ------------------------------------------ DECLARACION ---------------------------------------------
+# ------------------------------------------ ASIGNACION ---------------------------------------------
 def p_asignacion_i(t):
-    'asignacion_ins    : ID IGUAL expresion '
+    'asignacion_ins    : ID IGUAL expresion'
     t[0] = Asignacion(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
 # --------------------------------------------- IMPRIMIR ---------------------------------------------
 

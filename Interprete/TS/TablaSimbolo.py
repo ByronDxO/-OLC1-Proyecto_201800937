@@ -35,11 +35,11 @@ class TablaSimbolo:
 
     def actualizarTabla(self, simbolo):
         tablaActual = self
+        
         while tablaActual != None:
             if simbolo.id in tablaActual.tabla :
-                if tablaActual.tabla[simbolo.id].get_tipo() == simbolo.get_tipo():
+                if tablaActual.tabla[simbolo.id].get_id() == simbolo.get_id():
                     tablaActual.tabla[simbolo.id].set_valor(simbolo.get_valor())
-                    tablaActual.tabla[simbolo.id].set_tipo(simbolo.get_tipo())
                     return None 
                 return Exception("Semantico", "Tipo de dato Diferente en Asignacion", simbolo.get_fila(), simbolo.get_columna()) 
             else:

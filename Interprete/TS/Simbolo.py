@@ -40,3 +40,6 @@ class Simbolo():
 
     def set_valor(self, valor):
         self.valor = valor
+
+    def __str__(self):
+        return self.id + "-" + self.tipo + "-[" + self.fila + "," + self.columna +"]-" + self.valor
