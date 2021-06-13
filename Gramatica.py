@@ -114,6 +114,7 @@ precedence = (
     ('left','IGUALIGUAL','DIFERENCIA','MENORQUE','MENORIGUAL','MAYORQUE','MAYORIGUAL'),
     ('left','MAS','MENOS'),
     ('left','DIV','POR','MODULO'),
+    ('nonassoc', 'POT'),
     ('right','UMENOS'),
     )
 
@@ -139,7 +140,7 @@ def p_instrucciones_instrucciones_instruccion(t) :
         t[1].append(t[2])
     t[0] = t[1]
     
-#///////////////////////////////////////INSTRUCCIONES//////////////////////////////////////////////////
+# --------------------------------------------- INSTRUCCIONES ---------------------------------------------
 
 def p_instrucciones_instruccion(t) :
     'instrucciones    : instruccion'
@@ -148,20 +149,25 @@ def p_instrucciones_instruccion(t) :
     else:    
         t[0] = [t[1]]
 
-#///////////////////////////////////////INSTRUCCION//////////////////////////////////////////////////
+# --------------------------------------------- INSTRUCCION ---------------------------------------------
 
 def p_instruccion(t) :
-    '''instruccion      : imprimir_instr'''
+    '''instruccion      : imprimir_ fin_instruccion'''
     t[0] = t[1]
 
 def p_instruccion_error(t):
     'instruccion        : error PUNTOCOMA'
     errores.append(Exception("Sintáctico","Error Sintáctico." + str(t[1].value) , t.lineno(1), find_column(input, t.slice[1])))
     t[0] = ""
+
+def p_fin_instruc(t) :
+    '''fin_instruccion  : PUNTOCOMA
+                        | '''
+    t[0] = None
 #///////////////////////////////////////IMPRIMIR//////////////////////////////////////////////////
 
 def p_imprimir(t) :
-    'imprimir_instr     : RPRINT PARA expresion PARC PUNTOCOMA'
+    'imprimir_   : RPRINT PARA expresion PARC'
     t[0] = Imprimir(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
 #///////////////////////////////////////EXPRESION//////////////////////////////////////////////////
@@ -196,6 +202,8 @@ def p_expresion_binaria(t):
     elif t[2] == '%':
         t[0] = Aritmetica(Operador_Aritmetico.MODU, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))  
 
+    elif t[2] == '==':
+        t[0] = Relacional(Operador_Relacional.IGUALACION, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '<':
         t[0] = Relacional(Operador_Relacional.MENORQUE, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '<=':
@@ -204,10 +212,9 @@ def p_expresion_binaria(t):
         t[0] = Relacional(Operador_Relacional.MAYORQUE, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '>=':
         t[0] = Relacional(Operador_Relacional.MAYORIGUAL, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
-    elif t[2] == '==':
-        t[0] = Relacional(Operador_Relacional.IGUALACION, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '!=':
         t[0] = Relacional(Operador_Relacional.DIFERENCIA, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
+
     elif t[2] == '&&':
         t[0] = Logica(Operador_Logico.AND, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '||':
@@ -221,8 +228,14 @@ def p_expresion_unaria(t):
     '''
     if t[1] == '-':
         t[0] = Aritmetica(Operador_Aritmetico.UMENOS, t[2],None, t.lineno(1), find_column(input, t.slice[1]))
-    # elif t[1] == '!':
-    #     t[0] = Relacional(Operador_Aelacional.NOT, t[2],None, t.lineno(1), find_column(input, t.slice[1]))
+    elif t[1] == '!':
+         t[0] = Relacional(Operador_Logico.NOT, t[2],None, t.lineno(1), find_column(input, t.slice[1]))
+
+def p_expresion_agrupacion(t):
+    '''
+    expresion :   PARA expresion PARC 
+    '''
+    t[0] = t[2]
 
 def p_expresion_entero(t):
     '''expresion : ENTERO'''
