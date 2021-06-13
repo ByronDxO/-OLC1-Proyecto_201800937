@@ -6,12 +6,18 @@ reservadas = {
     'var'   : 'RVAR',
     'true'  : 'RTRUE',
     'false' : 'RFALSE',
+    'if'    : 'RIF',
+    'else'  : 'RELSE',
+    'while' : 'RWHILE',
+    'break' : 'RBREAK',
 }
 
 tokens  = [
     'PUNTOCOMA',
     'PARA',
     'PARC',
+    'LLAVEA',
+    'LLAVEC',
     'IGUAL',
     'MAS',
     'MENOS',
@@ -40,6 +46,8 @@ tokens  = [
 t_PUNTOCOMA     = r';'
 t_PARA          = r'\('
 t_PARC          = r'\)'
+t_LLAVEA         = r'\{'
+t_LLAVEC         = r'\}'
 t_IGUAL         = r'='
 t_MAS           = r'\+'
 t_MENOS         = r'-'
@@ -133,16 +141,18 @@ precedence = (
 #Abstract
 from Interprete.Instrucciones.Declaracion import Declaracion
 from Interprete.Instrucciones.Asignacion import Asignacion
-from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.Instrucciones.Imprimir import Imprimir
+from Interprete.Instrucciones.While import While
+from Interprete.Instrucciones.Break import Break
+from Interprete.Instrucciones.If import If
 
-
+from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Tipo import *
 
+from Interprete.Expresiones.Identificador import Identificador
 from Interprete.Expresiones.Primitivos import Primitivos
 from Interprete.Expresiones.Aritmetica import Aritmetica
 from Interprete.Expresiones.Relacional import Relacional
-from Interprete.Expresiones.Identificador import Identificador
 from Interprete.Expresiones.Logica import Logica
 
 def p_init(t) :
@@ -170,6 +180,9 @@ def p_instruccion(t):
     '''instruccion  : imprimir_ fin_instruccion
                     | declaracion_ins
                     | asignacion_ins fin_instruccion
+                    | if_ins
+                    | while_ins
+                    | break_ins fin_instruccion
                     | COMENTARIO_VARIAS_LINEAS
                     | COMENTARIO_SIMPLE
                     
@@ -213,6 +226,29 @@ def p_imprimir(t) :
     t[0] = Imprimir(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
 
+# --------------------------------------------- SENTENCIA IF ---------------------------------------------
+
+def p_condi_if(t):
+    'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC'
+    t[0] = If(t[3], t[6], None, None, t.lineno(1), find_column(input, t.slice[1]))
+
+def p_if2(t) :
+    'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC RELSE LLAVEA instrucciones LLAVEC'
+    t[0] = If(t[3], t[6], t[10], None, t.lineno(1), find_column(input, t.slice[1]))
+
+def p_if3(t) :
+    'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC RELSE if_ins'
+    t[0] = If(t[3], t[6], None, t[9], t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- WHILE --------------------------------------------- 
+def p_sentencia_while(t) :
+    'while_ins     : RWHILE PARA expresion PARC LLAVEA instrucciones LLAVEC'
+    t[0] = While(t[3], t[6], t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- BREAK ---------------------------------------------
+def p_sentencia_break(t) :
+    'break_ins     : RBREAK'
+    t[0] = Break(t.lineno(1), find_column(input, t.slice[1]))
 # --------------------------------------------- TIPO ---------------------------------------------
 def p_tipo_dato(t):
     '''TIPO :  RVAR'''
@@ -289,6 +325,7 @@ def p_expresion_agrupacion(t):
 
 def p_expresion_identificador(t):
     '''expresion : ID'''
+    
     t[0] = Identificador(t[1], t.lineno(1), find_column(input, t.slice[1]))
 
 def p_expresion_entero(t):
@@ -352,5 +389,10 @@ for instruccion in ast.get_instruccion():      # REALIZAR LAS ACCIONES
     if isinstance(value, Exception) :
         ast.get_excepcion().append(value)
         ast.update_consola(value.__str__())
+
+    if isinstance(value, Break): 
+        error_break = Exception("Semantico", "Sentencia break fuera de ciclo", instruccion.fila, instruccion.columna)
+        ast.get_excepciones().append(error_break)
+        ast.update_cnsola(error_break.__str__()) 
 
 print(ast.get_consola())

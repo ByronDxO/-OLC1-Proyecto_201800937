@@ -17,4 +17,5 @@ class Identificador(Instruccion):
 
         self.tipo = simbolo.get_tipo()
         
+        
         return simbolo.get_valor()

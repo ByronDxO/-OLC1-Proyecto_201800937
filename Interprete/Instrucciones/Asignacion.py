@@ -1,3 +1,4 @@
+from Interprete.Expresiones.Identificador import Identificador
 from Interprete.TS.Exception import Exception
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Simbolo import Simbolo
@@ -19,6 +20,7 @@ class Asignacion(Instruccion):
         simbolo = Simbolo(self.identificador, self.expresion.tipo, self.fila, self.columna, value)
 
         result = table.actualizarTabla(simbolo)
+        
 
         if isinstance(result, Exception): return result
         return None
