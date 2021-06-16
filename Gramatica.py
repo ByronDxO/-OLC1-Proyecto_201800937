@@ -11,6 +11,7 @@ reservadas = {
     'while' : 'RWHILE',
     'break' : 'RBREAK',
     'null'  : 'RNULL',
+    'main'  : 'RMAIN',
 }
 
 tokens  = [
@@ -38,6 +39,7 @@ tokens  = [
     'DECIMAL',
     'ENTERO',
     'CADENA',
+    'CHAR',
     'ID',
     'COMENTARIO_SIMPLE',
     'COMENTARIO_VARIAS_LINEAS',
@@ -94,8 +96,28 @@ def t_ID(t):
      return t
 
 def t_CADENA(t):
-    r'(\".*?\")'
-    t.value = t.value[1:-1] # remuevo las comillas
+    #r'(\".*?\")'
+    # t.value = t.value[1:-1] # remuevo las comillas
+    # return t
+    r'\"(\\"|.)*?\"'
+    t.value = t.value[1:-1]  # remover comillas
+    t.value = t.value.replace('\\n', '\n')
+    t.value = t.value.replace('\\r', '\r')
+    t.value = t.value.replace('\\\\', '\\')
+    t.value = t.value.replace('\\"', '\"')
+    t.value = t.value.replace('\\t', '\t')
+    t.value = t.value.replace("\\'", '\'')
+    return t
+
+def t_CHAR(t):
+    r"""\' (\\'| \\\\ | \\n | \\t | \\r | \\" | .)? \'"""
+    t.value = t.value[1:-1]  # remover comillas
+    t.value = t.value.replace('\\n', '\n')
+    t.value = t.value.replace('\\r', '\r')
+    t.value = t.value.replace('\\\\', '\\')
+    t.value = t.value.replace('\\"', '\"')
+    t.value = t.value.replace('\\t', '\t')
+    t.value = t.value.replace("\\'", '\'')
     return t
 
 def t_COMENTARIO_VARIAS_LINEAS(t):
@@ -358,6 +380,10 @@ def p_primitivo_decimal(t):
 def p_primitivo_cadena(t):
     '''expresion : CADENA'''
     t[0] = Primitivos(Tipo.CADENA,str(t[1]).replace('\\n', '\n'), t.lineno(1), find_column(input, t.slice[1]))
+
+def p_primitivo_char(t):
+    '''expresion : CHAR'''
+    t[0] = Primitivos(Tipo.CHAR,str(t[1]).replace('\\n', '\n'), t.lineno(1), find_column(input, t.slice[1]))
 
 def p_primitivo_true(t):
     '''expresion : RTRUE'''
