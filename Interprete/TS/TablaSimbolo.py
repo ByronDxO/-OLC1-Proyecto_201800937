@@ -9,7 +9,7 @@
 
 
 from Interprete.TS.Exception import Exception
-
+from Interprete.TS.Tipo import *
 
 class TablaSimbolo:
     def __init__(self, anterior = None):
@@ -38,9 +38,10 @@ class TablaSimbolo:
         
         while tablaActual != None:
             if simbolo.id in tablaActual.tabla :
-                if tablaActual.tabla[simbolo.id].get_id() == simbolo.get_id() or tablaActual.tabla[simbolo.id].get_tipo() == simbolo.get_tipo():
+                if tablaActual.tabla[simbolo.id].get_tipo() == simbolo.get_tipo() or tablaActual.tabla[simbolo.id].get_tipo() is Tipo.NULO or simbolo.tipo is Tipo.NULO:
                     tablaActual.tabla[simbolo.id].set_valor(simbolo.get_valor())
-                    return None 
+                    tablaActual.tabla[simbolo.id].set_tipo(simbolo.get_tipo())
+                    return None
                 return Exception("Semantico", "Tipo de dato Diferente en Asignacion", simbolo.get_fila(), simbolo.get_columna()) 
             else:
                 tablaActual = tablaActual.anterior

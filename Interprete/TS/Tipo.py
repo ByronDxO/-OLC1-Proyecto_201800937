@@ -14,13 +14,15 @@ class Tipo(Enum):
 
 class Operador_Aritmetico(Enum):
 
-    SUMA  = 1  # suma (+)
-    RESTA = 2  # resta (-)
-    POR   = 3  # multiplicacion (*)
-    DIV   = 4  # division (/)
-    POTE  = 5  # potencia (**)
-    MODU  = 6  # modulo (%)
-    UMENOS = 7
+    SUMA        = 1  # suma (+)
+    RESTA       = 2  # resta (-)
+    POR         = 3  # multiplicacion (*)
+    DIV         = 4  # division (/)
+    POTE        = 5  # potencia (**)
+    MODU        = 6  # modulo (%)
+    UMENOS      = 7
+    INCREMENTO  = 8  # ++
+    DECREMENTO  = 9  # --
 
 class Operador_Relacional(Enum):
     

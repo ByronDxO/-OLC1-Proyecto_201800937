@@ -12,7 +12,7 @@ class Declaracion(Instruccion):
         self.columna = columna
 
     def interpretar(self, tree, table):
-        
+
         if self.expresion != None:
             value = self.expresion.interpretar(tree, table) # Valor a asignar a la variable
             if isinstance(value, Exception): return value
@@ -20,12 +20,10 @@ class Declaracion(Instruccion):
         else:
             value = None
 
-        
         simbolo = Simbolo(str(self.identificador), self.tipo, self.fila, self.columna, value)
         
         result = table.setTabla(simbolo)
-        
-
+  
         if isinstance(result, Exception): return result
         
         return None

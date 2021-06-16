@@ -10,6 +10,7 @@ reservadas = {
     'else'  : 'RELSE',
     'while' : 'RWHILE',
     'break' : 'RBREAK',
+    'null'  : 'RNULL',
 }
 
 tokens  = [
@@ -39,7 +40,9 @@ tokens  = [
     'CADENA',
     'ID',
     'COMENTARIO_SIMPLE',
-    'COMENTARIO_VARIAS_LINEAS'
+    'COMENTARIO_VARIAS_LINEAS',
+    'INCREMENTO',
+    'DECREMENTO',
 ] + list(reservadas.values())
 
 # Tokens
@@ -64,6 +67,8 @@ t_AND           = r'&&'
 t_OR            = r'\|\|'
 t_NOT           = r'!'
 t_DIFERENCIA    = r'!='
+t_INCREMENTO    = r'\+\+'
+t_DECREMENTO    = r'\-\-'
 
 def t_DECIMAL(t):
     r'\d+\.\d+'
@@ -139,6 +144,7 @@ precedence = (
 # Definición de la gramática
 
 #Abstract
+from Interprete.Instrucciones.IncrementoDecremento import IncrementoDecremento
 from Interprete.Instrucciones.Declaracion import Declaracion
 from Interprete.Instrucciones.Asignacion import Asignacion
 from Interprete.Instrucciones.Imprimir import Imprimir
@@ -180,11 +186,13 @@ def p_instruccion(t):
     '''instruccion  : imprimir_ fin_instruccion
                     | declaracion_ins
                     | asignacion_ins fin_instruccion
+                    | incre_decre_ins fin_instruccion
                     | if_ins
                     | while_ins
                     | break_ins fin_instruccion
                     | COMENTARIO_VARIAS_LINEAS
                     | COMENTARIO_SIMPLE
+                    
                     
     '''
     t[0] = t[1]
@@ -254,7 +262,18 @@ def p_tipo_dato(t):
     '''TIPO :  RVAR'''
 
     if t[1] == 'var':
-        t[0] = Tipo.VAR
+        t[0] = Tipo.NULO
+# --------------------------------------------- INCREMENTO O DECREMENTO ---------------------------------------------
+def p_incremento_decremento(t):
+    ''' incre_decre_ins : ID INCREMENTO
+                        | ID DECREMENTO'''
+
+    if t[2] == '++':
+        t[0] = IncrementoDecremento(t[1], Operador_Aritmetico.INCREMENTO, t.lineno(1), find_column(input, t.slice[1]))
+    elif t[2] == '--':
+        t[0] = IncrementoDecremento(t[1], Operador_Aritmetico.DECREMENTO, t.lineno(1), find_column(input, t.slice[1]))
+   
+    
 
 # --------------------------------------------- EXPRESION ---------------------------------------------
 
@@ -347,6 +366,10 @@ def p_primitivo_true(t):
 def p_primitivo_false(t):
     '''expresion : RFALSE'''
     t[0] = Primitivos(Tipo.BOOLEANO, False, t.lineno(1), find_column(input, t.slice[1]))
+
+def p_primitivo_null(t):
+    '''expresion : RNULL '''
+    t[0] = Primitivos(Tipo.NULO, None, t.lineno(1), find_column(input, t.slice[1]))
 
 
 import Interprete.ply.yacc as yacc
