@@ -14,7 +14,9 @@ reservadas = {
     'main'  : 'RMAIN',
     'func'  : 'RFUNC',
     'for'   : 'RFOR',
+    'switch': 'RSWITCH',
 }
+
 
 tokens  = [
     'PUNTOCOMA',
@@ -404,7 +406,7 @@ def p_expresion_unaria(t):
     if t[1] == '-':
         t[0] = Aritmetica(Operador_Aritmetico.UMENOS, t[2],None, t.lineno(1), find_column(input, t.slice[1]))
     elif t[1] == '!':
-         t[0] = Relacional(Operador_Logico.NOT, t[2],None, t.lineno(1), find_column(input, t.slice[1]))
+         t[0] = Logica(Operador_Logico.NOT, t[2],None, t.lineno(1), find_column(input, t.slice[1]))
 
 def p_expresion_agrupacion(t):
     '''
