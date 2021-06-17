@@ -20,7 +20,7 @@ class While(Instruccion):
             if self.condicion.tipo == Tipo.BOOLEANO:
                 if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
                     nuevaTabla = TablaSimbolo(table)       #NUEVO ENTORNO
-                    
+
                     for instruccion in self.instrucciones:
                         result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
                         if isinstance(result, Exception):

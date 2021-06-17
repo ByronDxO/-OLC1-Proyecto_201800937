@@ -20,7 +20,7 @@ class Declaracion(Instruccion):
         else:
             value = None
 
-        simbolo = Simbolo(str(self.identificador), self.tipo, self.fila, self.columna, value)
+        simbolo = Simbolo(str(self.identificador).lower(), self.tipo, self.fila, self.columna, value)
         
         result = table.setTabla(simbolo)
   

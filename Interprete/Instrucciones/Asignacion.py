@@ -16,7 +16,7 @@ class Asignacion(Instruccion):
         value = self.expresion.interpretar(tree, table) # Valor a asignar a la variable
         if isinstance(value, Exception): return value
         
-        simbolo = Simbolo(self.identificador, self.expresion.tipo, self.fila, self.columna, value)
+        simbolo = Simbolo(str(self.identificador).lower(), self.expresion.tipo, self.fila, self.columna, value)
         result = table.actualizarTabla(simbolo)
         
         if isinstance(result, Exception): return result

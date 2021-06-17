@@ -17,14 +17,12 @@ class For(Instruccion):
         self.columna = columna
 
     def interpretar(self, tree, table):
-        # print(self.variable.identificador) # variable declarada o asignada
         
-        if isinstance(self.variable, Declaracion): tabla_nueva = TablaSimbolo(table) 
-        elif isinstance(self.variable, Asignacion): tabla_nueva = table
-        else:  return Exception("Semantico", "No hay declaracion o asignacion.", self.fila, self.columna)
-        
-        declaracion = self.variable.interpretar(tree, tabla_nueva)
-        if isinstance(declaracion, Exception): return declaracion
+        tabla_nueva = TablaSimbolo(table)
+        if self.variable!= None:
+            declaracion = self.variable.interpretar(tree, tabla_nueva)
+            if isinstance(declaracion, Exception): return declaracion
+
 
         while True:
 
@@ -45,6 +43,7 @@ class For(Instruccion):
                     
                     update = self.actualizacion.interpretar(tree, nuevaTabla)
                     if isinstance(update, Exception): return update
+
                 else:
                     break
             else:
