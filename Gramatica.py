@@ -13,6 +13,7 @@ reservadas = {
     'null'  : 'RNULL',
     'main'  : 'RMAIN',
     'func'  : 'RFUNC',
+    'for'   : 'RFOR',
 }
 
 tokens  = [
@@ -52,8 +53,8 @@ tokens  = [
 t_PUNTOCOMA     = r';'
 t_PARA          = r'\('
 t_PARC          = r'\)'
-t_LLAVEA         = r'\{'
-t_LLAVEC         = r'\}'
+t_LLAVEA        = r'\{'
+t_LLAVEC        = r'\}'
 t_IGUAL         = r'='
 t_MAS           = r'\+'
 t_MENOS         = r'-'
@@ -176,6 +177,7 @@ from Interprete.Instrucciones.Funcion import Funcion
 from Interprete.Instrucciones.While import While
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Main import Main
+from Interprete.Instrucciones.For import For
 from Interprete.Instrucciones.If import If
 
 from Interprete.Abstract.Instruccion import Instruccion
@@ -210,11 +212,11 @@ def p_instrucciones_instruccion(t) :
 
 def p_instruccion(t):
     '''instruccion  : imprimir_ fin_instruccion
-                    | declaracion_ins
-                    | asignacion_ins fin_instruccion
+                    | declaracion_ins fin_instruccion
                     | incre_decre_ins fin_instruccion
                     | if_ins
                     | while_ins
+                    | for_ins
                     | main_ins
                     | break_ins fin_instruccion
                     | funcion_ins
@@ -228,10 +230,27 @@ def p_instruccion(t):
 
 def p_decla(t):
     ''' declaracion_ins : declaracion_ 
-                        | declaracion_comp'''
+                        | declaracion_comp
+                        | asignacion_ins '''
         
     t[0] = t[1]
 
+# ---------------------------------------- DECLARACION FOR -------------------------------------------
+def p_declaracion_for(t):
+    ''' declaracion_for : declaracion_comp
+                        | asignacion_ins '''
+        
+    t[0] = t[1]
+
+def p_actualizacion_for(t):
+    ''' asignacion_for : asignacion_ins 
+                        | incre_decre_ins '''
+        
+    t[0] = t[1]
+
+
+
+# ---------------------------------------- ERROR EN PUNTO COMA -------------------------------------------
 def p_instruccion_error(t):
     'instruccion        : error PUNTOCOMA'
     errores.append(Exception("Sintáctico","Error Sintáctico." + str(t[1].value) , t.lineno(1), find_column(input, t.slice[1])))
@@ -243,12 +262,12 @@ def p_fin_instruc(t) :
     t[0] = None
 # ------------------------------------------ DECLARACION ---------------------------------------------
 def p_declaracion_simple(t):
-    '''declaracion_  :  TIPO ID fin_instruccion'''
+    '''declaracion_  :  TIPO ID'''
     
     t[0] = Declaracion(t[1], t[2], t.lineno(2), find_column(input, t.slice[2]))
 
 def p_declaracion_completa(t):
-    'declaracion_comp  : TIPO ID IGUAL expresion fin_instruccion'
+    'declaracion_comp  : TIPO ID IGUAL expresion'
 
     t[0] = Declaracion(t[1], t[2], t.lineno(2), find_column(input, t.slice[2]), t[4])
 
@@ -281,6 +300,11 @@ def p_condi_if_tres(t) :
 def p_sentencia_while(t) :
     'while_ins     : RWHILE PARA expresion PARC LLAVEA instrucciones LLAVEC'
     t[0] = While(t[3], t[6], t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- FOR --------------------------------------------- 
+def p_sentencia_for(t) :
+    'for_ins     : RFOR PARA declaracion_for PUNTOCOMA expresion PUNTOCOMA asignacion_for PARC LLAVEA instrucciones LLAVEC'
+    t[0] = For(t[3], t[5], t[7], t[10],  t.lineno(1), find_column(input, t.slice[1]))
 
 # --------------------------------------------- MAIN --------------------------------------------- 
 def p_main(t) :

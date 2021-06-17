@@ -14,23 +14,23 @@ class IncrementoDecremento(Instruccion):
         self.columna = columna
 
     def interpretar(self, tree, table):
+        
         if self.tipo == Operador_Aritmetico.INCREMENTO:
             simbolo = table.getTabla(self.identificador.lower())
             if simbolo.tipo == Tipo.ENTERO or simbolo.tipo == Tipo.DECIMAL:
-                value = simbolo.valor + 1
-                self.tipo = simbolo.tipo
+                simbolo.valor = simbolo.valor + 1
+                #self.tipo = simbolo.tipo
         elif self.tipo == Operador_Aritmetico.DECREMENTO:
             simbolo = table.getTabla(self.identificador.lower())
             if simbolo.tipo == Tipo.ENTERO or simbolo.tipo == Tipo.DECIMAL:
-                value = simbolo.valor - 1
-                self.tipo = simbolo.tipo
+                simbolo.valor = simbolo.valor - 1
+                #self.tipo = simbolo.tipo
         else:
             return Exception("Semantico", "Variable " + self.identificador + " Diferente tipo de dato.", self.fila, self.columna)
-
-        simbolo_nuevo = Simbolo(self.identificador, self.tipo, self.fila, self.columna, value)
-        result = table.actualizarTabla(simbolo_nuevo)
-        
-
+       
+        #simbolo_nuevo = Simbolo(self.identificador.lower(), simbolo.tipo, self.fila, self.columna, simbolo.valor)
+        result = table.actualizarTabla(simbolo)
         if isinstance(result, Exception): return result
-        return None
+
+        return result
 
