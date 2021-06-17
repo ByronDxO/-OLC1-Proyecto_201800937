@@ -78,7 +78,7 @@ class Ventana():
 
         
         self.scroll_consola = scrolledtext.ScrolledText(self.root_window, height=20, width=70) # consola
-        self.scroll_consola.configure(state='disabled')
+        #self.scroll_consola.configure(state='disabled')
         self.scroll_consola.pack()
         self.scroll_consola.place(x=700, y=25)
 
@@ -238,8 +238,11 @@ class Ventana():
         #INTERFAZ
         import Gramatica as prueba
         print("aca es interprete")
-        print(prueba.ast.get_consola())
+        result=self.scroll.text.get(1.0, tk.END+"-1c")
+        prueba.entrada = result
+        AST = prueba.interprete(result)
 
+        self.scroll_consola.insert(tk.INSERT, AST.get_consola())
 
     def debugger(self):
         pass
