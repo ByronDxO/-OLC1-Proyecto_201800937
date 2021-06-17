@@ -12,6 +12,7 @@ reservadas = {
     'break' : 'RBREAK',
     'null'  : 'RNULL',
     'main'  : 'RMAIN',
+    'func'  : 'RFUNC',
 }
 
 tokens  = [
@@ -170,8 +171,11 @@ from Interprete.Instrucciones.IncrementoDecremento import IncrementoDecremento
 from Interprete.Instrucciones.Declaracion import Declaracion
 from Interprete.Instrucciones.Asignacion import Asignacion
 from Interprete.Instrucciones.Imprimir import Imprimir
+from Interprete.Instrucciones.LLamada import Llamada
+from Interprete.Instrucciones.Funcion import Funcion
 from Interprete.Instrucciones.While import While
 from Interprete.Instrucciones.Break import Break
+from Interprete.Instrucciones.Main import Main
 from Interprete.Instrucciones.If import If
 
 from Interprete.Abstract.Instruccion import Instruccion
@@ -211,7 +215,10 @@ def p_instruccion(t):
                     | incre_decre_ins fin_instruccion
                     | if_ins
                     | while_ins
+                    | main_ins
                     | break_ins fin_instruccion
+                    | funcion_ins
+                    | llamada_ins
                     | COMENTARIO_VARIAS_LINEAS
                     | COMENTARIO_SIMPLE
                     
@@ -262,11 +269,11 @@ def p_condi_if(t):
     'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC'
     t[0] = If(t[3], t[6], None, None, t.lineno(1), find_column(input, t.slice[1]))
 
-def p_if2(t) :
+def p_condi_if_dos(t) :
     'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC RELSE LLAVEA instrucciones LLAVEC'
     t[0] = If(t[3], t[6], t[10], None, t.lineno(1), find_column(input, t.slice[1]))
 
-def p_if3(t) :
+def p_condi_if_tres(t) :
     'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC RELSE if_ins'
     t[0] = If(t[3], t[6], None, t[9], t.lineno(1), find_column(input, t.slice[1]))
 
@@ -274,6 +281,23 @@ def p_if3(t) :
 def p_sentencia_while(t) :
     'while_ins     : RWHILE PARA expresion PARC LLAVEA instrucciones LLAVEC'
     t[0] = While(t[3], t[6], t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- MAIN --------------------------------------------- 
+def p_main(t) :
+    'main_ins     : RMAIN PARA PARC LLAVEA instrucciones LLAVEC'
+    t[0] = Main(t[5], t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- FUNCION --------------------------------------------- 
+
+def p_funcion(t) :
+    'funcion_ins     : RFUNC ID PARA PARC LLAVEA instrucciones LLAVEC'
+    t[0] = Funcion(t[2], t[6], t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- LLAMADA --------------------------------------------- 
+
+def p_llamada_de_funcion(t) :
+    'llamada_ins     : ID PARA PARC'
+    t[0] = Llamada(t[1], t.lineno(1), find_column(input, t.slice[1]))
 
 # --------------------------------------------- BREAK ---------------------------------------------
 def p_sentencia_break(t) :
@@ -425,23 +449,50 @@ entrada = f.read()
 from Interprete.TS.Arbol import Arbol
 from Interprete.TS.TablaSimbolo import TablaSimbolo
 
-instrucciones = parse(entrada) #ARBOL AST
+instrucciones = parse(entrada) # ARBOL AST
 ast = Arbol(instrucciones)
 TSGlobal = TablaSimbolo()
 ast.set_tabla_ts_global(TSGlobal)
-for error in errores:                   #CAPTURA DE ERRORES LEXICOS Y SINTACTICOS
+for error in errores:                   # Aqui va a "Capturar o Guardar" todo error Lexico y Sintactico.
     ast.get_excepcion().append(error)
     ast.update_consola(error.__str__())
 
-for instruccion in ast.get_instruccion():      # REALIZAR LAS ACCIONES
-    value = instruccion.interpretar(ast,TSGlobal)
-    if isinstance(value, Exception) :
-        ast.get_excepcion().append(value)
-        ast.update_consola(value.__str__())
+for instruccion in ast.get_instruccion():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
+    if isinstance(instruccion, Funcion):
+        ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+    if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion):
+        value = instruccion.interpretar(ast,TSGlobal)
+        if isinstance(value, Exception) :
+            ast.get_excepcion().append(value)
+            ast.update_consola(value.__str__())
+        if isinstance(value, Break): 
+            err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
 
-    if isinstance(value, Break): 
-        error_break = Exception("Semantico", "Sentencia break fuera de ciclo", instruccion.fila, instruccion.columna)
-        ast.get_excepciones().append(error_break)
-        ast.update_cnsola(error_break.__str__()) 
+
+for instruccion in ast.get_instruccion():      # Verfiica con esta instruccion que el main no sea repetido
+    i = 0
+    if isinstance(instruccion, Main):
+        i += 1
+        if i == 2: # VERIFICAR LA DUPLICIDAD
+            err = Exception("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+            break
+        value = instruccion.interpretar(ast,TSGlobal)
+        if isinstance(value, Exception) :
+            ast.get_excepcion().append(value)
+            ast.update_consola(value.__str__())
+        if isinstance(value, Break): 
+            err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+
+for instruccion in ast.get_instruccion():    # Ultima vez que lo reccore, va a buscar funciones fuera del main
+    if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, Funcion)):
+        err = Exception("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
+        ast.get_excepcion().append(err)
+        ast.update_consola(err.__str__())
 
 print(ast.get_consola())

@@ -7,6 +7,7 @@ class Arbol():
     
     def __init__(self, instruccion):
         self.instruccion = instruccion
+        self.funciones = []
         self.excepcion = []
         self.consola = ""
         self.tabla_ts_global = None
@@ -16,6 +17,15 @@ class Arbol():
 
     def set_instruccion(self, instruccion):
         self.instruccion = instruccion
+
+    def get_funciones(self):
+        return self.funciones
+
+    def getFuncion(self, nombre):
+        for funcion in self.funciones:
+            if funcion.nombre == nombre:
+                return funcion
+        return None
 
     def get_excepcion(self):
         return self.excepcion
@@ -37,3 +47,6 @@ class Arbol():
 
     def set_tabla_ts_global(self, ts_global):
         self.tabla_ts_global = ts_global
+
+    def addFuncion(self, funcion):
+        self.funciones.append(funcion)
