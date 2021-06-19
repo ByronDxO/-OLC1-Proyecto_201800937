@@ -2,19 +2,18 @@ from Interprete.TS.Exception import Exception
 
 errores = []
 reservadas = {
-    'print' : 'RPRINT',
-    'var'   : 'RVAR',
-    'true'  : 'RTRUE',
-    'false' : 'RFALSE',
-    'if'    : 'RIF',
-    'else'  : 'RELSE',
-    'while' : 'RWHILE',
-    'break' : 'RBREAK',
-    'null'  : 'RNULL',
-    'main'  : 'RMAIN',
-    'func'  : 'RFUNC',
-    'for'   : 'RFOR',
-    'switch': 'RSWITCH',
+    'print'   : 'RPRINT',
+    'var'     : 'RVAR',
+    'true'    : 'RTRUE',
+    'false'   : 'RFALSE',
+    'if'      : 'RIF',
+    'else'    : 'RELSE',
+    'while'   : 'RWHILE',
+    'break'   : 'RBREAK',
+    'null'    : 'RNULL',
+    'main'    : 'RMAIN',
+    'func'    : 'RFUNC',
+    'for'     : 'RFOR',
 }
 
 
@@ -72,7 +71,7 @@ t_IGUALIGUAL    = r'=='
 t_AND           = r'&&'
 t_OR            = r'\|\|'
 t_NOT           = r'!'
-t_DIFERENCIA    = r'!='
+t_DIFERENCIA    = r'=!'
 t_INCREMENTO    = r'\+\+'
 t_DECREMENTO    = r'\-\-'
 
@@ -176,8 +175,10 @@ from Interprete.Instrucciones.Asignacion import Asignacion
 from Interprete.Instrucciones.Imprimir import Imprimir
 from Interprete.Instrucciones.LLamada import Llamada
 from Interprete.Instrucciones.Funcion import Funcion
+from Interprete.Instrucciones.Switch import Switch
 from Interprete.Instrucciones.While import While
 from Interprete.Instrucciones.Break import Break
+from Interprete.Instrucciones.Case import Case
 from Interprete.Instrucciones.Main import Main
 from Interprete.Instrucciones.For import For
 from Interprete.Instrucciones.If import If
@@ -286,17 +287,42 @@ def p_imprimir(t) :
 
 # --------------------------------------------- SENTENCIA IF ---------------------------------------------
 
-def p_condi_if(t):
+def p_condi_if(t): # Condicion if si solo viene un if
     'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC'
     t[0] = If(t[3], t[6], None, None, t.lineno(1), find_column(input, t.slice[1]))
 
-def p_condi_if_dos(t) :
+def p_condi_if_dos(t) : # condicion if si solo viene un if y un else
     'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC RELSE LLAVEA instrucciones LLAVEC'
     t[0] = If(t[3], t[6], t[10], None, t.lineno(1), find_column(input, t.slice[1]))
 
-def p_condi_if_tres(t) :
+def p_condi_if_tres(t) : # condicion para que pueda venir un else if, o un else if y un else.
     'if_ins     : RIF PARA expresion PARC LLAVEA instrucciones LLAVEC RELSE if_ins'
     t[0] = If(t[3], t[6], None, t[9], t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- SENTENCIA SWITCH ---------------------------------------------
+# def p_condicion_switch(t):
+#     '''switch_ins   : RSWITCH PARA expresion PARC LLAVEA caso_switch_ins LLAVEC'''
+#     print(t[1])
+#     print(t[2])
+#     print(t[3])
+#     t[0] = Switch(t[3], t[6], t.lineno(1), find_column(input, t.slice[1]))
+    
+
+# def p_condicion_switch_case(t):
+#     '''caso_switch_ins  : RCASE expresion DOSPUNTOS instrucciones caso_switch_ins '''
+#     t[0] = Case(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+
+# def p_condicion_case_uno(t):
+#     'caso_switch_ins : RCASE expresion DOSPUNTOS instrucciones'
+#     t[0] = Case(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+
+    
+    # t[0] = None
+
+# def p_default_switch(t):
+#     'default_ins: RDEFAULT instrucciones'
+#     t[0] = None
+
 
 # --------------------------------------------- WHILE --------------------------------------------- 
 def p_sentencia_while(t) :
@@ -389,7 +415,7 @@ def p_expresion_binaria(t):
         t[0] = Relacional(Operador_Relacional.MAYORQUE, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
     elif t[2] == '>=':
         t[0] = Relacional(Operador_Relacional.MAYORIGUAL, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
-    elif t[2] == '!=':
+    elif t[2] == '=!':
         t[0] = Relacional(Operador_Relacional.DIFERENCIA, t[1],t[3], t.lineno(2), find_column(input, t.slice[2]))
 
     elif t[2] == '&&':
@@ -471,7 +497,6 @@ def parse(inp) :
 
 # f = open("./entrada.txt", "r")
 # entrada = f.read()
-entrada = ""
 # from Interprete.TS.Arbol import Arbol
 # from Interprete.TS.TablaSimbolo import TablaSimbolo
 
@@ -574,5 +599,4 @@ def interprete(entrada):
             ast.get_excepcion().append(err)
             ast.update_consola(err.__str__())
 
-    print(ast.get_consola())
     return ast

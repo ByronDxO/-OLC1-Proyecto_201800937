@@ -17,12 +17,12 @@ class While(Instruccion):
             condicion = self.condicion.interpretar(tree, table)
             if isinstance(condicion, Exception): return condicion
             
-            if self.condicion.tipo == Tipo.BOOLEANO:
-                if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
-                    nuevaTabla = TablaSimbolo(table)       #NUEVO ENTORNO
+            if self.condicion.tipo == Tipo.BOOLEANO: # Aqui verifica si la condicion es una expresion logica, sino lanza una Exception.
+                if bool(condicion) == True:                 
+                    nuevaTabla = TablaSimbolo(table)        # Inicia el Nuevo Ambito.
 
-                    for instruccion in self.instrucciones:
-                        result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
+                    for instruccion in self.instrucciones:  # Inicia ejecutando las instrucciones adentro del While.
+                        result = instruccion.interpretar(tree, nuevaTabla) 
                         if isinstance(result, Exception):
                             tree.get_excepcion().append(result)
                             tree.update_consola(result.__str__())
@@ -30,4 +30,4 @@ class While(Instruccion):
                 else:
                     break
             else:
-                return Exception("Semantico", "Tipo de dato no booleano en IF.", self.fila, self.columna)
+                return Exception("Semantico", "Tipo de dato no booleano en While.", self.fila, self.columna)

@@ -64,7 +64,7 @@ class Aritmetica(Instruccion):
             # CHAR
             elif self.OperacionIzq.tipo == Tipo.CHAR and self.OperacionDer.tipo == Tipo.CHAR:                       # char + char  = string            
                 self.tipo = Tipo.CADENA
-                return str(self.obtenerVal(self.OperacionIzq.tipo, izq)) + self.obtenerVal(self.OperacionDer.tipo, der)
+                return str(self.obtenerVal(self.OperacionIzq.tipo, izq)) + str(self.obtenerVal(self.OperacionDer.tipo, der))
             elif self.OperacionIzq.tipo == Tipo.CHAR and self.OperacionDer.tipo == Tipo.CHAR:                       # char + string  = string            
                 self.tipo = Tipo.CADENA
                 return bool(self.obtenerVal(self.OperacionIzq.tipo, izq)) + bool(self.obtenerVal(self.OperacionDer.tipo, der))
@@ -77,13 +77,13 @@ class Aritmetica(Instruccion):
                 return self.obtenerVal(self.OperacionIzq.tipo, izq) + str(self.obtenerVal(self.OperacionDer.tipo, der))
             elif self.OperacionIzq.tipo == Tipo.CADENA and self.OperacionDer.tipo == Tipo.CADENA:                       # string + string  = string            
                 self.tipo = Tipo.CADENA
-                return str(self.obtenerVal(self.OperacionIzq.tipo, izq)) + self.obtenerVal(self.OperacionDer.tipo, der)
+                return str(self.obtenerVal(self.OperacionIzq.tipo, izq)) + str(self.obtenerVal(self.OperacionDer.tipo, der))
             elif self.OperacionIzq.tipo == Tipo.CADENA and self.OperacionDer.tipo == Tipo.BOOLEANO:                     # string + boolean  = string           
                 self.tipo = Tipo.CADENA
-                return self.obtenerVal(self.OperacionIzq.tipo, izq) + self.obtenerVal(self.OperacionDer.tipo, der)
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) + str(self.obtenerVal(self.OperacionDer.tipo, der))
             elif self.OperacionIzq.tipo == Tipo.CADENA and self.OperacionDer.tipo == Tipo.CHAR:                         # string + char  = string           
                 self.tipo = Tipo.CADENA
-                return self.obtenerVal(self.OperacionIzq.tipo, izq) + self.obtenerVal(self.OperacionDer.tipo, der)
+                return self.obtenerVal(self.OperacionIzq.tipo, izq) + str(self.obtenerVal(self.OperacionDer.tipo, der))
             return Exception("Semantico", "Tipo Erroneo de operacion para +.", self.fila, self.columna)
             
         elif self.operador == Operador_Aritmetico.RESTA:

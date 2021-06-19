@@ -18,33 +18,31 @@ class For(Instruccion):
 
     def interpretar(self, tree, table):
         
-        tabla_nueva = TablaSimbolo(table)
-        if self.variable!= None:
-            declaracion = self.variable.interpretar(tree, tabla_nueva)
-            if isinstance(declaracion, Exception): return declaracion
-
+        tabla_nueva = TablaSimbolo(table) # Inicia el primer Ambito.
+        declaracion = self.variable.interpretar(tree, tabla_nueva)
+        if isinstance(declaracion, Exception): return declaracion
 
         while True:
 
             condicion = self.condicion.interpretar(tree, tabla_nueva)
             if isinstance(condicion, Exception): return condicion
 
-            if self.condicion.tipo == Tipo.BOOLEANO:
+            if self.condicion.tipo == Tipo.BOOLEANO: # Aqui verifica si la condicion es una expresion logica, sino lanza una Exception.
 
-                if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
+                if bool(condicion) == True:  # Si cumple la condicion se Ejecuta y si no se sale.
                     
-                    nuevaTabla = TablaSimbolo(tabla_nueva)       #NUEVO ENTORNO
-                    for instruccion in self.instrucciones:
-                        result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
+                    nuevaTabla = TablaSimbolo(tabla_nueva)       # Inicia el segundo ambito.
+                    for instruccion in self.instrucciones:       # Inicia ejecutando las instrucciones adentro del For.
+                        result = instruccion.interpretar(tree, nuevaTabla) 
                         if isinstance(result, Exception) :
                             tree.get_excepcion().append(result)
                             tree.update_consola(result.__str__())
                         if isinstance(result, Break): return None
                     
-                    update = self.actualizacion.interpretar(tree, nuevaTabla)
+                    update = self.actualizacion.interpretar(tree, nuevaTabla) # Aqui hace la actualizacion de un incremeno, decremento o asignacion.
                     if isinstance(update, Exception): return update
 
                 else:
                     break
             else:
-                return Exception("Semantico", "Tipo de dato no booleano en IF.", self.fila, self.columna)
+                return Exception("Semantico", "Tipo de dato no booleano en For.", self.fila, self.columna)

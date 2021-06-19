@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
+import tkinter.font as tkFont
 
 
 class Ventana():
@@ -72,15 +73,16 @@ class Ventana():
 
         self.scroll = ScrollText(self.root_window) # aqui va el codigo fuente
         self.scroll.pack()
-        self.scroll.place(x=50, y=25)
+        self.scroll.place(x=10, y=25)
         #self.scroll.text.focus()
         #self.root_window.after(200, self.scroll.redraw())
 
         
-        self.scroll_consola = scrolledtext.ScrolledText(self.root_window, height=20, width=70) # consola
+        self.fontStyle = tkFont.Font(family="Courier New",size=8)
+        self.scroll_consola = scrolledtext.ScrolledText(self.root_window, height=23, width=80, font=self.fontStyle) # consola
         #self.scroll_consola.configure(state='disabled')
         self.scroll_consola.pack()
-        self.scroll_consola.place(x=700, y=25)
+        self.scroll_consola.place(x=750, y=25)
 
 
         # -----------------------  PARTE DE REPORTES Y TABLA DE SIMBOLOS ---------------------------
@@ -146,14 +148,9 @@ class Ventana():
         self.table_error.heading('NO', text='#', anchor=CENTER)
         self.table_error.heading('TIPO', text='Tipo', anchor=CENTER)
         self.table_error.heading('DESCRIPCION', text='Dimension', anchor=CENTER)
-        self.table_error.heading('LINEA', text='Valor', anchor=CENTER)
-        self.table_error.heading('COLUMNA', text='Ambito', anchor=CENTER)
-        """
-        i = 0
-        while i < 10:
-            self.table_error.insert(parent='', index=i, iid=i, text='', values=(f'{i+1}',f'tipo{i}',f'des{i}',f'linea{i}',f'colu{i}'))
-            i += 1
-        """
+        self.table_error.heading('LINEA', text='Fila', anchor=CENTER)
+        self.table_error.heading('COLUMNA', text='Columna', anchor=CENTER)
+        
         self.table_error.pack() 
         # ----------------------------------- POSICION DEL MOUSE ----------------------------------
        
@@ -238,12 +235,19 @@ class Ventana():
         #INTERFAZ
         import Gramatica as prueba
         print("aca es interprete")
+        
         result=self.scroll.text.get(1.0, tk.END+"-1c")
-        prueba.entrada = result
+        # prueba.entrada = result
         AST = prueba.interprete(result)
 
         self.scroll_consola.insert(tk.INSERT, AST.get_consola())
+        i = 0
+        for pedo in AST.get_excepcion():
+            self.table_error.insert(parent='', index=i, iid=i, text='', values=(f'{i+1}',f'{pedo.tipo}',f'{pedo.descripcion}',f'{pedo.fila}',f'{pedo.columna}'))
+            print(pedo)
+            i += 1
 
+      
     def debugger(self):
         pass
 
@@ -259,8 +263,10 @@ class Ventana():
 class ScrollText(tk.Frame):
     def __init__(self, master, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
+        
+        self.fontStyle = tkFont.Font(family="Courier New",size=8)
         # bg -> color de fondo --- foreground -> color al texto --- selectbrackgroud -> color a lo que seleccione --- inserbackgroud -> color al puntero
-        self.text = tk.Text(self, bg='#FFFFFF', foreground="#000000", selectbackground="#C8C8C8", insertbackground='#000000',  height=20, width=70)
+        self.text = tk.Text(self, bg='#FFFFFF', foreground="#000000", selectbackground="#C8C8C8", insertbackground='#000000',  height=23, width=95, font=self.fontStyle)
 
         self.scrollbar = tk.Scrollbar(self, orient=tk.VERTICAL, command=self.text.yview)
         self.text.configure(yscrollcommand=self.scrollbar.set)

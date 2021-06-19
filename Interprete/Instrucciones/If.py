@@ -15,29 +15,34 @@ class If(Instruccion):
         self.columna = columna
 
     def interpretar(self, tree, table):
+
         condicion = self.condicion.interpretar(tree, table)
         if isinstance(condicion, Exception): return condicion
 
-        if self.condicion.tipo == Tipo.BOOLEANO:
-            if bool(condicion) == True:   # VERIFICA SI ES VERDADERA LA CONDICION
-                nuevaTabla = TablaSimbolo(table)       #NUEVO ENTORNO
+        if self.condicion.tipo == Tipo.BOOLEANO: # Aqui verifica si la condicion es una expresion logica, sino lanza una Exception.
+
+            if bool(condicion) == True:   # Verifica que cummpla esta condicion, si no pasa al else if o al else.
+                nuevaTabla = TablaSimbolo(table)       # Se inicia con el primer Ambito.
                 for instruccion in self.instruccionesIf:
-                    result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
+                    result = instruccion.interpretar(tree, nuevaTabla) # Inicia ejecutando las instrucciones adentro del If.
                     if isinstance(result, Exception):
                         tree.get_excepcion().append(result)
                         tree.update_consola(result.__str__())
                     if isinstance(result, Break): return result
-            else: # AQUI SI LA CONDICION NO CUMPLE.
-                if self.instruccionesElse != None:
-                    nuevaTabla = TablaSimbolo(table)       #NUEVO ENTORNO
-                    for instruccion in self.instruccionesElse:
-                        result = instruccion.interpretar(tree, nuevaTabla) #EJECUTA INSTRUCCION ADENTRO DEL IF
+
+            else: # Aqui busca si la condicion es un else if o un else.
+
+                if self.instruccionesElse != None: # Aqui se ejecuta las instrucciones del else.
+                    nuevaTabla = TablaSimbolo(table)       # Se creal el nuevo Ambito.
+                    for instruccion in self.instruccionesElse:  # Inicia ejecutando las instrucciones adentro del else.
+                        result = instruccion.interpretar(tree, nuevaTabla) 
                         if isinstance(result, Exception) :
                             tree.get_excepcion().append(result)
                             tree.update_consola(result.__str__()) 
                         if isinstance(result, Break): return result
-                elif self.elseIf != None:
-                    result = self.elseIf.interpretar(tree, table)
+
+                elif self.elseIf != None:   # Aqui se ejecuta las instrucciones del else if.
+                    result = self.elseIf.interpretar(tree, table) 
                     if isinstance(result, Exception): return result
                     if isinstance(result, Break): return result
 
