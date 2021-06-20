@@ -14,6 +14,9 @@ reservadas = {
     'main'    : 'RMAIN',
     'func'    : 'RFUNC',
     'for'     : 'RFOR',
+    'switch'  : 'RSWITCH',
+    'case'    : 'RCASE',
+    'default' : 'RDEFAULT'
 }
 
 
@@ -48,6 +51,7 @@ tokens  = [
     'COMENTARIO_VARIAS_LINEAS',
     'INCREMENTO',
     'DECREMENTO',
+    'DOSPUNTOS',
 ] + list(reservadas.values())
 
 # Tokens
@@ -74,6 +78,7 @@ t_NOT           = r'!'
 t_DIFERENCIA    = r'=!'
 t_INCREMENTO    = r'\+\+'
 t_DECREMENTO    = r'\-\-'
+t_DOSPUNTOS     = r'\:'
 
 def t_DECIMAL(t):
     r'\d+\.\d+'
@@ -175,6 +180,7 @@ from Interprete.Instrucciones.Asignacion import Asignacion
 from Interprete.Instrucciones.Imprimir import Imprimir
 from Interprete.Instrucciones.LLamada import Llamada
 from Interprete.Instrucciones.Funcion import Funcion
+from Interprete.Instrucciones.Default import Default
 from Interprete.Instrucciones.Switch import Switch
 from Interprete.Instrucciones.While import While
 from Interprete.Instrucciones.Break import Break
@@ -219,6 +225,7 @@ def p_instruccion(t):
                     | incre_decre_ins fin_instruccion
                     | if_ins
                     | while_ins
+                    | switch_ins
                     | for_ins
                     | main_ins
                     | break_ins fin_instruccion
@@ -300,28 +307,39 @@ def p_condi_if_tres(t) : # condicion para que pueda venir un else if, o un else 
     t[0] = If(t[3], t[6], None, t[9], t.lineno(1), find_column(input, t.slice[1]))
 
 # --------------------------------------------- SENTENCIA SWITCH ---------------------------------------------
-# def p_condicion_switch(t):
-#     '''switch_ins   : RSWITCH PARA expresion PARC LLAVEA caso_switch_ins LLAVEC'''
-#     print(t[1])
-#     print(t[2])
-#     print(t[3])
-#     t[0] = Switch(t[3], t[6], t.lineno(1), find_column(input, t.slice[1]))
-    
+def p_condicion_switch_case_list_default(t): # Aqui verifiac que la condicion venga  [<CASES_LIST>] [<DEFAULT>]
+    'switch_ins   : RSWITCH PARA expresion PARC LLAVEA case_switch_ins default_switch LLAVEC'
+    t[0] = Switch(t[3], t[6], t[7] ,t.lineno(1), find_column(input, t.slice[1]))
 
-# def p_condicion_switch_case(t):
-#     '''caso_switch_ins  : RCASE expresion DOSPUNTOS instrucciones caso_switch_ins '''
-#     t[0] = Case(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+def p_condicion_switch_case_list(t): # Aqui verifiac que la condicion venga  [<CASES_LIST>]
+    'switch_ins   : RSWITCH PARA expresion PARC LLAVEA case_switch_ins LLAVEC'
+    t[0] = Switch(t[3], t[6], None, t.lineno(1), find_column(input, t.slice[1]))
 
-# def p_condicion_case_uno(t):
-#     'caso_switch_ins : RCASE expresion DOSPUNTOS instrucciones'
-#     t[0] = Case(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+def p_condicion_switch_default(t): # Aqui verifiac que la condicion venga   [<DEFAULT>]
+    'switch_ins   : RSWITCH PARA expresion PARC LLAVEA default_switch LLAVEC'
+    t[0] = Switch(t[3], None, t[6], t.lineno(1), find_column(input, t.slice[1]))
 
-    
-    # t[0] = None
+def p_casos_switch_ins_caso_switch(t): # Aqui hace a que sea recursivo y puedan venir infinitos [<CASES_LIST>]
+    'case_switch_ins : case_switch_ins case_switch'
+    if t[2] != "":
+        t[1].append(t[2])
+    t[0] = t[1]
 
-# def p_default_switch(t):
-#     'default_ins: RDEFAULT instrucciones'
-#     t[0] = None
+def p_caso_switch_(t):
+    'case_switch_ins : case_switch'
+    if t[1] == "":
+        t[0] = []
+    else:    
+        t[0] = [t[1]]
+
+def p_condicion_switch_case(t):
+    'case_switch  : RCASE expresion DOSPUNTOS instrucciones'
+    t[0] = Case(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_condicion_default_switch(t):
+    'default_switch : RDEFAULT DOSPUNTOS instrucciones'
+    # t[0] = t[3]
+    t[0] = Default(t[3], t.lineno(1), find_column(input, t.slice[1]))
 
 
 # --------------------------------------------- WHILE --------------------------------------------- 
@@ -495,58 +513,58 @@ def parse(inp) :
 
 #INTERFAZ
 
-# f = open("./entrada.txt", "r")
-# entrada = f.read()
-# from Interprete.TS.Arbol import Arbol
-# from Interprete.TS.TablaSimbolo import TablaSimbolo
+f = open("./entrada.txt", "r")
+entrada = f.read()
+from Interprete.TS.Arbol import Arbol
+from Interprete.TS.TablaSimbolo import TablaSimbolo
 
-# instrucciones = parse(entrada) # ARBOL AST
-# ast = Arbol(instrucciones)
-# TSGlobal = TablaSimbolo()
-# ast.set_tabla_ts_global(TSGlobal)
-# for error in errores:                   # Aqui va a "Capturar o Guardar" todo error Lexico y Sintactico.
-#     ast.get_excepcion().append(error)
-#     ast.update_consola(error.__str__())
+instrucciones = parse(entrada) # ARBOL AST
+ast = Arbol(instrucciones)
+TSGlobal = TablaSimbolo()
+ast.set_tabla_ts_global(TSGlobal)
+for error in errores:                   # Aqui va a "Capturar o Guardar" todo error Lexico y Sintactico.
+    ast.get_excepcion().append(error)
+    ast.update_consola(error.__str__())
 
-# for instruccion in ast.get_instruccion():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
-#     if isinstance(instruccion, Funcion):
-#         ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
-#     if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion):
-#         value = instruccion.interpretar(ast,TSGlobal)
-#         if isinstance(value, Exception) :
-#             ast.get_excepcion().append(value)
-#             ast.update_consola(value.__str__())
-#         if isinstance(value, Break): 
-#             err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
-#             ast.get_excepcion().append(err)
-#             ast.update_consola(err.__str__())
+for instruccion in ast.get_instruccion():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
+    if isinstance(instruccion, Funcion):
+        ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+    if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion):
+        value = instruccion.interpretar(ast,TSGlobal)
+        if isinstance(value, Exception) :
+            ast.get_excepcion().append(value)
+            ast.update_consola(value.__str__())
+        if isinstance(value, Break): 
+            err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
 
 
-# for instruccion in ast.get_instruccion():      # Verfiica con esta instruccion que el main no sea repetido
-#     i = 0
-#     if isinstance(instruccion, Main):
-#         i += 1
-#         if i == 2: # VERIFICAR LA DUPLICIDAD
-#             err = Exception("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
-#             ast.get_excepcion().append(err)
-#             ast.update_consola(err.__str__())
-#             break
-#         value = instruccion.interpretar(ast,TSGlobal)
-#         if isinstance(value, Exception) :
-#             ast.get_excepcion().append(value)
-#             ast.update_consola(value.__str__())
-#         if isinstance(value, Break): 
-#             err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
-#             ast.get_excepcion().append(err)
-#             ast.update_consola(err.__str__())
+for instruccion in ast.get_instruccion():      # Verfiica con esta instruccion que el main no sea repetido
+    i = 0
+    if isinstance(instruccion, Main):
+        i += 1
+        if i == 2: # VERIFICAR LA DUPLICIDAD
+            err = Exception("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+            break
+        value = instruccion.interpretar(ast,TSGlobal)
+        if isinstance(value, Exception) :
+            ast.get_excepcion().append(value)
+            ast.update_consola(value.__str__())
+        if isinstance(value, Break): 
+            err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
 
-# for instruccion in ast.get_instruccion():    # Ultima vez que lo reccore, va a buscar funciones fuera del main
-#     if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, Funcion)):
-#         err = Exception("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
-#         ast.get_excepcion().append(err)
-#         ast.update_consola(err.__str__())
+for instruccion in ast.get_instruccion():    # Ultima vez que lo reccore, va a buscar funciones fuera del main
+    if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, Funcion)):
+        err = Exception("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
+        ast.get_excepcion().append(err)
+        ast.update_consola(err.__str__())
 
-# print(ast.get_consola())
+print(ast.get_consola())
 
 
 def interprete(entrada):
