@@ -163,7 +163,7 @@ class Ventana():
         self.root_window.config(menu=self.barra_menu)
         self.root_window.mainloop()
 
-    ########################## POSICION ##########################
+    # ----------------------------------- POSICION -----------------------------------
 
     def get_posicion_mouse(self, *args, **kwargs):
         position = self.scroll.text.index(INSERT)

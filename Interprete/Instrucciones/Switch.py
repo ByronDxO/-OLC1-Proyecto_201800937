@@ -24,16 +24,16 @@ class Switch(Instruccion):
         
         if self.caso_instrucciones != None and self.default_instrucciones != None:      # Condicion 1 => [<CASES_LIST>] [<DEFAULT>]
             
-            nuevaTabla = TablaSimbolo(table)
-            for instrucciones in self.caso_instrucciones:
+            nuevaTabla = TablaSimbolo(table) # Se crea el nuevo ambito.
+            for instrucciones in self.caso_instrucciones: # Interpreta todos los  [<CASES_LIST>]
 
-                result = instrucciones.interpretar(tree, nuevaTabla)
+                result = instrucciones.interpretar(tree, nuevaTabla) # Interpreta la condicion del case, devuelve la expresion.
                 if isinstance(result, Exception): 
                     tree.get_excepcion().append(result)
                     tree.update_consola(result.__str__())
                 
-                if (condicion == result):
-                    for instruccion in instrucciones.get_instrucciones_case():
+                if (condicion == result): # Valida que la condicion sea la misma a la del case.
+                    for instruccion in instrucciones.get_instrucciones_case(): # Si la condicion es acertada, trae las instrucciones y las interpreta.
                         value = instruccion.interpretar(tree, nuevaTabla)
                         if isinstance(value, Exception):     
                             tree.get_excepcion().append(value)
@@ -41,7 +41,7 @@ class Switch(Instruccion):
                         if isinstance(value, Break): return None
 
             
-            for instrucciones in self.default_instrucciones.get_instrucciones_default():
+            for instrucciones in self.default_instrucciones.get_instrucciones_default(): # si la condicion del switch y del case jamas fue encontrada, ejecuta el default.
 
                 result = instrucciones.interpretar(tree, nuevaTabla)
                 if isinstance(result, Exception): 
@@ -53,16 +53,16 @@ class Switch(Instruccion):
                 
         elif self.caso_instrucciones != None and self.default_instrucciones == None:    # Condicion 2 => [<CASES_LIST>] 
 
-            nuevaTabla = TablaSimbolo(table)
-            for instrucciones in self.caso_instrucciones:
+            nuevaTabla = TablaSimbolo(table) # Se crea el nuevo ambito.
+            for instrucciones in self.caso_instrucciones: # Interpreta todos los  [<CASES_LIST>]
 
-                result = instrucciones.interpretar(tree, nuevaTabla)
+                result = instrucciones.interpretar(tree, nuevaTabla) # Interpreta la condicion del case, devuelve la expresion.
                 if isinstance(result, Exception): 
                     tree.get_excepcion().append(result)
                     tree.update_consola(result.__str__())
                 
-                if (condicion == result):
-                    for instruccion in instrucciones.get_instrucciones_case():
+                if (condicion == result): # Valida que la condicion sea la misma a la del case.
+                    for instruccion in instrucciones.get_instrucciones_case(): # Si la condicion es acertada, trae las instrucciones y las interpreta.
                         value = instruccion.interpretar(tree, nuevaTabla)
                         if isinstance(value, Exception):     
                             tree.get_excepcion().append(value)
@@ -73,7 +73,7 @@ class Switch(Instruccion):
         elif self.caso_instrucciones == None and self.default_instrucciones != None:    # Condicion 3 => [<DEFAULT>]
             nuevaTabla = TablaSimbolo(table)
 
-            for instrucciones in self.default_instrucciones.get_instrucciones_default():
+            for instrucciones in self.default_instrucciones.get_instrucciones_default(): # Interpreta toda las condiciones del [<DEFAULT>].
 
                 result = instrucciones.interpretar(tree, nuevaTabla)
                 if isinstance(result, Exception): 
