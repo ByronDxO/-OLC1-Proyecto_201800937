@@ -137,7 +137,11 @@ class Aritmetica(Instruccion):
 
         elif self.operador == Operador_Aritmetico.DIV:
 
-            if self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.ENTERO:                         # int / int     = double
+            if (self.OperacionIzq.tipo == Tipo.DECIMAL or self.OperacionIzq.tipo == Tipo.ENTERO) and (self.OperacionDer.tipo == Tipo.DECIMAL or self.OperacionDer.tipo == Tipo.ENTERO):                      # double / double  = double
+                self.tipo = Tipo.DECIMAL
+                if self.obtenerVal(self.OperacionDer.tipo, der) == 0:  
+                    return Exception("Semantico", "Divisiones entre 0 no se puede", self.fila, self.columna)
+            elif self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.ENTERO:                         # int / int     = double
                 self.tipo = Tipo.DECIMAL
                 return self.obtenerVal(self.OperacionIzq.tipo, izq) / self.obtenerVal(self.OperacionDer.tipo, der)
             elif self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.DECIMAL:                      # int / double  = double
@@ -150,6 +154,8 @@ class Aritmetica(Instruccion):
             elif self.OperacionIzq.tipo == Tipo.DECIMAL and self.OperacionDer.tipo == Tipo.DECIMAL:                      # double / double  = double
                 self.tipo = Tipo.DECIMAL
                 return self.obtenerVal(self.OperacionIzq.tipo, izq) / self.obtenerVal(self.OperacionDer.tipo, der)
+
+           
            
             return Exception("Semantico", "Tipo Erroneo de operacion para /.", self.fila, self.columna)
         
@@ -175,7 +181,11 @@ class Aritmetica(Instruccion):
 
         elif self.operador == Operador_Aritmetico.MODU:
 
-            if self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.ENTERO:                         # int % int     = double
+            if (self.OperacionIzq.tipo == Tipo.DECIMAL or self.OperacionIzq.tipo == Tipo.ENTERO) and (self.OperacionDer.tipo == Tipo.DECIMAL or self.OperacionDer.tipo == Tipo.ENTERO):                      # double / double  = double
+                self.tipo = Tipo.DECIMAL
+                if self.obtenerVal(self.OperacionDer.tipo, der) == 0:  
+                    return Exception("Semantico", "Modular entre 0 no se puede", self.fila, self.columna)
+            elif self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.ENTERO:                         # int % int     = double
                 self.tipo = Tipo.DECIMAL
                 return self.obtenerVal(self.OperacionIzq.tipo, izq) % self.obtenerVal(self.OperacionDer.tipo, der)
             elif self.OperacionIzq.tipo == Tipo.ENTERO and self.OperacionDer.tipo == Tipo.DECIMAL:                      # int % double  = double
