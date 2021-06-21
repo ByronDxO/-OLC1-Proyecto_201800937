@@ -20,11 +20,17 @@ class IncrementoDecremento(Instruccion):
             if simbolo.tipo == Tipo.ENTERO or simbolo.tipo == Tipo.DECIMAL:
                 simbolo.valor = simbolo.valor + 1
                 #self.tipo = simbolo.tipo
+            else:
+                 return Exception("Semantico", "Error de Tipo de dato.", self.fila, self.columna)
+       
+
         elif self.tipo == Operador_Aritmetico.DECREMENTO:
             simbolo = table.getTabla(self.identificador.lower())
             if simbolo.tipo == Tipo.ENTERO or simbolo.tipo == Tipo.DECIMAL:
                 simbolo.valor = simbolo.valor - 1
                 #self.tipo = simbolo.tipo
+            else:
+                return Exception("Semantico", "Error de Tipo de dato.", self.fila, self.columna)
         else:
             return Exception("Semantico", "Variable " + self.identificador + " Diferente tipo de dato.", self.fila, self.columna)
        
