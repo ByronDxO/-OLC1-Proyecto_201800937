@@ -395,6 +395,10 @@ class Ventana():
         for tokens_reservadas in global_lista:
             if  (tokens_reservadas[1].lower() == "print")     or \
                 (tokens_reservadas[1].lower() == "var")       or \
+                (tokens_reservadas[1].lower() == "int")       or \
+                (tokens_reservadas[1].lower() == "string")    or \
+                (tokens_reservadas[1].lower() == "double")    or \
+                (tokens_reservadas[1].lower() == "var")       or \
                 (tokens_reservadas[1].lower() == "true")      or \
                 (tokens_reservadas[1].lower() == "false")     or \
                 (tokens_reservadas[1].lower() == "if")        or \

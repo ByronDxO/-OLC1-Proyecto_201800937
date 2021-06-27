@@ -16,12 +16,18 @@ reservadas = {
     'for'     : 'RFOR',
     'switch'  : 'RSWITCH',
     'case'    : 'RCASE',
-    'default' : 'RDEFAULT'
+    'default' : 'RDEFAULT',
+    'return'  : 'RRETURN',
+    'int'     : 'RINT',
+    'dobule'  : 'RDOUBLE',
+    'string'  : 'RSTRING',
+    'char'    : 'RCHAR',
 }
 
 
 tokens  = [
     'PUNTOCOMA',
+    'COMA',
     'PARA',
     'PARC',
     'LLAVEA',
@@ -56,6 +62,7 @@ tokens  = [
 
 # Tokens
 t_PUNTOCOMA     = r';'
+t_COMA          = r','
 t_PARA          = r'\('
 t_PARC          = r'\)'
 t_LLAVEA        = r'\{'
@@ -182,6 +189,7 @@ from Interprete.Instrucciones.LLamada import Llamada
 from Interprete.Instrucciones.Funcion import Funcion
 from Interprete.Instrucciones.Default import Default
 from Interprete.Instrucciones.Switch import Switch
+from Interprete.Instrucciones.Return import Return
 from Interprete.Instrucciones.While import While
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Case import Case
@@ -229,8 +237,9 @@ def p_instruccion(t):
                     | for_ins
                     | main_ins
                     | break_ins fin_instruccion
+                    | return_ins fin_instruccion
                     | funcion_ins
-                    | llamada_ins
+                    | llamada_ins fin_instruccion
                     | COMENTARIO_VARIAS_LINEAS
                     | COMENTARIO_SIMPLE
                     
@@ -272,8 +281,7 @@ def p_fin_instruc(t) :
     t[0] = None
 # ------------------------------------------ DECLARACION ---------------------------------------------
 def p_declaracion_simple(t):
-    '''declaracion_  :  TIPO ID'''
-    
+    'declaracion_  :  TIPO ID'
     t[0] = Declaracion(t[1], t[2], t.lineno(2), find_column(input, t.slice[2]))
 
 def p_declaracion_completa(t):
@@ -359,26 +367,86 @@ def p_main(t) :
 
 # --------------------------------------------- FUNCION --------------------------------------------- 
 
-def p_funcion(t) :
+def p_funcion_2(t) :
     'funcion_ins     : RFUNC ID PARA PARC LLAVEA instrucciones LLAVEC'
-    t[0] = Funcion(t[2], t[6], t.lineno(1), find_column(input, t.slice[1]))
+    t[0] = Funcion(t[2], [], t[6], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_funcion_parametros(t) :
+    'funcion_ins     : RFUNC ID PARA parametros PARC LLAVEA instrucciones LLAVEC'
+    t[0] = Funcion(t[2], t[4], t[7], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_parametros_parametros(t) :
+    'parametros     : parametros COMA parametro'
+    t[1].append(t[3])
+    t[0] = t[1]
+    
+def p_parametros_parametro(t) :
+    'parametros    : parametro'
+    t[0] = [t[1]]
+
+def p_parametro(t) :
+    'parametro     : tipo_funcion ID'
+    t[0] = {'tipoDato':t[1],'identificador':t[2]} # Se crea un diccionario tipoDato: tipo, identificador
 
 # --------------------------------------------- LLAMADA --------------------------------------------- 
 
 def p_llamada_de_funcion(t) :
     'llamada_ins     : ID PARA PARC'
-    t[0] = Llamada(t[1], t.lineno(1), find_column(input, t.slice[1]))
+    t[0] = Llamada(t[1], [], t.lineno(1), find_column(input, t.slice[1]))
+
+
+def p_llamada_de_fincion_parametros(t) :
+    'llamada_ins     : ID PARA parametros_llamada PARC'
+    t[0] = Llamada(t[1], t[3], t.lineno(1), find_column(input, t.slice[1]))
+
+def p_parametros_llamadas_parametros_llamadas(t) :
+    'parametros_llamada     : parametros_llamada COMA parametro_llamada'
+    t[1].append(t[3])
+    t[0] = t[1]
+    
+def p_parametros_llamadas_parametro_llamada(t) :
+    'parametros_llamada    : parametro_llamada'
+    t[0] = [t[1]]
+
+def p_parametro_llamada(t) :
+    'parametro_llamada     : expresion'
+    t[0] = t[1]
+
 
 # --------------------------------------------- BREAK ---------------------------------------------
 def p_sentencia_break(t) :
     'break_ins     : RBREAK'
     t[0] = Break(t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- RETURN ---------------------------------------------
+def p_return_instruccion(t) :
+    'return_ins     : RRETURN expresion'
+    t[0] = Return(t[2], t.lineno(1), find_column(input, t.slice[1]))
+
 # --------------------------------------------- TIPO ---------------------------------------------
 def p_tipo_dato(t):
-    '''TIPO :  RVAR'''
+    '''TIPO :  RVAR
+            |'''
 
     if t[1] == 'var':
         t[0] = Tipo.NULO
+
+def p_tipo_funcion(t):
+    ''' tipo_funcion    : RINT
+                        | RDOUBLE
+                        | RSTRING
+                        | RCHAR
+                        | RTRUE
+                        | RFALSE'''
+    if t[1].lower() == 'int':
+        t[0] = Tipo.ENTERO
+    elif t[1].lower() == 'double':
+        t[0] = Tipo.DECIMAL
+    elif t[1].lower() == 'string':
+        t[0] = Tipo.CADENA
+    elif t[1].lower() == 'true' or t[1] == 'false':
+        t[0] = Tipo.BOOLEANO
+
 # --------------------------------------------- INCREMENTO O DECREMENTO ---------------------------------------------
 def p_incremento_decremento(t):
     ''' incre_decre_ins : ID INCREMENTO
@@ -553,6 +621,10 @@ def interprete(entrada):
                 ast.update_consola(value.__str__())
             if isinstance(value, Break): 
                 err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+                ast.get_excepcion().append(err)
+                ast.update_consola(err.__str__())
+            if isinstance(value, Return): 
+                err = Excepcion("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
                 ast.get_excepcion().append(err)
                 ast.update_consola(err.__str__())
 
