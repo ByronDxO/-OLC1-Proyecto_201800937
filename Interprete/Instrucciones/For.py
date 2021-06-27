@@ -6,6 +6,7 @@ from Interprete.TS.Exception import Exception
 from Interprete.TS.Tipo import Tipo
 from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
+from Interprete.Instrucciones.Return import Return
 
 class For(Instruccion):
     def __init__(self, variable, condicion, actualizacion, instrucciones,  fila, columna):
@@ -38,6 +39,7 @@ class For(Instruccion):
                             tree.get_excepcion().append(result)
                             tree.update_consola(result.__str__())
                         if isinstance(result, Break): return None
+                        if isinstance(result, Return): return result
                     
                     update = self.actualizacion.interpretar(tree, nuevaTabla) # Aqui hace la actualizacion de un incremeno, decremento o asignacion.
                     if isinstance(update, Exception): return update

@@ -17,6 +17,8 @@ class IncrementoDecremento(Instruccion):
         
         if self.tipo == Operador_Aritmetico.INCREMENTO:
             simbolo = table.getTabla(self.identificador.lower())
+            if simbolo is None:
+                return None
             if simbolo.tipo == Tipo.ENTERO or simbolo.tipo == Tipo.DECIMAL:
                 simbolo.valor = simbolo.valor + 1
                 #self.tipo = simbolo.tipo

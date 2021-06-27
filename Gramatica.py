@@ -22,6 +22,7 @@ reservadas = {
     'dobule'  : 'RDOUBLE',
     'string'  : 'RSTRING',
     'char'    : 'RCHAR',
+    'boolean' : 'RBOOLEAN',
 }
 
 
@@ -436,15 +437,14 @@ def p_tipo_funcion(t):
                         | RDOUBLE
                         | RSTRING
                         | RCHAR
-                        | RTRUE
-                        | RFALSE'''
+                        | RBOOLEAN'''
     if t[1].lower() == 'int':
         t[0] = Tipo.ENTERO
     elif t[1].lower() == 'double':
         t[0] = Tipo.DECIMAL
     elif t[1].lower() == 'string':
         t[0] = Tipo.CADENA
-    elif t[1].lower() == 'true' or t[1] == 'false':
+    elif t[1].lower() == 'boolean':
         t[0] = Tipo.BOOLEANO
 
 # --------------------------------------------- INCREMENTO O DECREMENTO ---------------------------------------------
@@ -559,6 +559,9 @@ def p_primitivo_null(t):
     '''expresion : RNULL '''
     t[0] = Primitivos(Tipo.NULO, None, t.lineno(1), find_column(input, t.slice[1]))
 
+def p_expresion_llamada(t):
+    '''expresion : llamada_ins'''
+    t[0] = t[1]
 
 import Interprete.ply.yacc as yacc
 parser = yacc.yacc()

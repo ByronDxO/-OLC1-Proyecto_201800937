@@ -31,6 +31,8 @@ class TablaSimbolo:
                 return tablaActual.tabla[id]
             else:
                 tablaActual = tablaActual.anterior
+                if tablaActual is None:
+                    return None
         return None
 
     def actualizarTabla(self, simbolo):
@@ -45,6 +47,8 @@ class TablaSimbolo:
                 return Exception("Semantico", "Tipo de dato Diferente en Asignacion", simbolo.get_fila(), simbolo.get_columna()) 
             else:
                 tablaActual = tablaActual.anterior
+                if tablaActual is None:
+                    return None
         return Exception("Semantico", "Variable No encontrada en Asignacion", simbolo.get_fila(), simbolo.get_columna())
         
         
