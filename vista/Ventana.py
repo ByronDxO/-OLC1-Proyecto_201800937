@@ -423,7 +423,6 @@ class Ventana():
     def interpretar(self):
         #INTERFAZ
         import Gramatica as prueba
-        print("aca es interprete")
         
         result=self.scroll.text.get(1.0, tk.END+"-1c")
         self.scroll.text.delete("1.0","end")

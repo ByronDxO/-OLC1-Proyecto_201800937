@@ -27,8 +27,8 @@ class TablaSimbolo:
     def getTabla(self, id):            # obtener una variable
         tablaActual = self
         while tablaActual.tabla != None:
-            if id in tablaActual.tabla :
-                return tablaActual.tabla[id]
+            if id.lower() in tablaActual.tabla :
+                return tablaActual.tabla[id.lower()]
             else:
                 tablaActual = tablaActual.anterior
                 if tablaActual is None:
@@ -40,9 +40,9 @@ class TablaSimbolo:
         
         while tablaActual != None:
             if simbolo.id in tablaActual.tabla :
-                if tablaActual.tabla[simbolo.id].get_tipo() == simbolo.get_tipo() or tablaActual.tabla[simbolo.id].get_tipo() is Tipo.NULO or simbolo.tipo is Tipo.NULO:
-                    tablaActual.tabla[simbolo.id].set_valor(simbolo.get_valor())
-                    tablaActual.tabla[simbolo.id].set_tipo(simbolo.get_tipo())
+                if tablaActual.tabla[simbolo.id.lower()].get_tipo() == simbolo.get_tipo() or tablaActual.tabla[simbolo.id.lower()].get_tipo() is Tipo.NULO or simbolo.tipo is Tipo.NULO:
+                    tablaActual.tabla[simbolo.id.lower()].set_valor(simbolo.get_valor())
+                    tablaActual.tabla[simbolo.id.lower()].set_tipo(simbolo.get_tipo())
                     return None
                 return Exception("Semantico", "Tipo de dato Diferente en Asignacion", simbolo.get_fila(), simbolo.get_columna()) 
             else:

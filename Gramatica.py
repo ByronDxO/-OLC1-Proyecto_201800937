@@ -1,5 +1,12 @@
 from Interprete.TS.Exception import Exception
 
+from Interprete.Nativas.Truncate import Truncate 
+from Interprete.Nativas.ToUpper import ToUpper
+from Interprete.Nativas.ToLower import ToLower
+from Interprete.Nativas.Length import Length
+from Interprete.Nativas.Round import Round
+
+
 errores = []
 reservadas = {
     'print'   : 'RPRINT',
@@ -428,7 +435,6 @@ def p_return_instruccion(t) :
 def p_tipo_dato(t):
     '''TIPO :  RVAR
             |'''
-
     if t[1] == 'var':
         t[0] = Tipo.NULO
 
@@ -444,6 +450,8 @@ def p_tipo_funcion(t):
         t[0] = Tipo.DECIMAL
     elif t[1].lower() == 'string':
         t[0] = Tipo.CADENA
+    elif t[1].lower() == 'char':
+        t[0] = Tipo.CHAR
     elif t[1].lower() == 'boolean':
         t[0] = Tipo.BOOLEANO
 
@@ -563,6 +571,8 @@ def p_expresion_llamada(t):
     '''expresion : llamada_ins'''
     t[0] = t[1]
 
+
+
 import Interprete.ply.yacc as yacc
 parser = yacc.yacc()
 
@@ -582,6 +592,37 @@ def parse(inp) :
     input = inp
     return parser.parse(inp)
 
+def crearNativas(ast):          # CREACION Y DECLARACION DE LAS FUNCIONES NATIVAS
+    nombre = "toupper"
+    parametros = [{'tipoDato':Tipo.CADENA,'identificador':'toUpper##Param1'}]
+    instrucciones = []
+    toUpper = ToUpper(nombre, parametros, instrucciones, -1, -1)
+    ast.addFuncion(toUpper)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+
+    nombre = "tolower"
+    parametros = [{'tipoDato':Tipo.CADENA,'identificador':'toLower##Param1'}]
+    instrucciones = []
+    toLower = ToLower(nombre, parametros, instrucciones, -1, -1)
+    ast.addFuncion(toLower)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+
+    nombre = "length"
+    parametros = [{'tipoDato':Tipo.CADENA,'identificador':'length##Param1'}]
+    instrucciones = []
+    length = Length(nombre, parametros, instrucciones, -1, -1)
+    ast.addFuncion(length)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+
+    nombre = "truncate"
+    parametros = [{'tipoDato':Tipo.ENTERO,'identificador':'truncate##Param1'}]
+    instrucciones = []
+    truncate = Truncate(nombre, parametros, instrucciones, -1, -1)
+    ast.addFuncion(truncate)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+    
+    nombre = "round"
+    parametros = [{'tipoDato':Tipo.ENTERO,'identificador':'round##Param1'}]
+    instrucciones = []
+    rround = Round(nombre, parametros, instrucciones, -1, -1)
+    ast.addFuncion(rround)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+
 
 def interprete(entrada):
     from Interprete.TS.Arbol import Arbol
@@ -591,6 +632,7 @@ def interprete(entrada):
     ast = Arbol(instrucciones)
     TSGlobal = TablaSimbolo()
     ast.set_tabla_ts_global(TSGlobal)
+    crearNativas(ast)
     for error in errores:                   # Aqui va a "Capturar o Guardar" todo error Lexico y Sintactico.
         ast.get_excepcion().append(error)
         ast.update_consola(error.__str__())
