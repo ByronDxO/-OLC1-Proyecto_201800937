@@ -9,27 +9,28 @@ from Interprete.Nativas.Round import Round
 
 errores = []
 reservadas = {
-    'print'   : 'RPRINT',
-    'var'     : 'RVAR',
-    'true'    : 'RTRUE',
-    'false'   : 'RFALSE',
-    'if'      : 'RIF',
-    'else'    : 'RELSE',
-    'while'   : 'RWHILE',
-    'break'   : 'RBREAK',
-    'null'    : 'RNULL',
-    'main'    : 'RMAIN',
-    'func'    : 'RFUNC',
-    'for'     : 'RFOR',
-    'switch'  : 'RSWITCH',
-    'case'    : 'RCASE',
-    'default' : 'RDEFAULT',
-    'return'  : 'RRETURN',
-    'int'     : 'RINT',
-    'dobule'  : 'RDOUBLE',
-    'string'  : 'RSTRING',
-    'char'    : 'RCHAR',
-    'boolean' : 'RBOOLEAN',
+    'print'    : 'RPRINT',
+    'var'      : 'RVAR',
+    'true'     : 'RTRUE',
+    'false'    : 'RFALSE',
+    'if'       : 'RIF',
+    'else'     : 'RELSE',
+    'while'    : 'RWHILE',
+    'break'    : 'RBREAK',
+    'null'     : 'RNULL',
+    'main'     : 'RMAIN',
+    'func'     : 'RFUNC',
+    'for'      : 'RFOR',
+    'switch'   : 'RSWITCH',
+    'case'     : 'RCASE',
+    'default'  : 'RDEFAULT',
+    'return'   : 'RRETURN',
+    'int'      : 'RINT',
+    'dobule'   : 'RDOUBLE',
+    'string'   : 'RSTRING',
+    'char'     : 'RCHAR',
+    'boolean'  : 'RBOOLEAN',
+    'continue' : 'RCONTINUE',
 }
 
 
@@ -192,6 +193,7 @@ precedence = (
 from Interprete.Instrucciones.IncrementoDecremento import IncrementoDecremento
 from Interprete.Instrucciones.Declaracion import Declaracion
 from Interprete.Instrucciones.Asignacion import Asignacion
+from Interprete.Instrucciones.Continue import Continue
 from Interprete.Instrucciones.Imprimir import Imprimir
 from Interprete.Instrucciones.LLamada import Llamada
 from Interprete.Instrucciones.Funcion import Funcion
@@ -246,6 +248,7 @@ def p_instruccion(t):
                     | main_ins
                     | break_ins fin_instruccion
                     | return_ins fin_instruccion
+                    | continue_ins fin_instruccion
                     | funcion_ins
                     | llamada_ins fin_instruccion
                     | COMENTARIO_VARIAS_LINEAS
@@ -430,6 +433,11 @@ def p_sentencia_break(t) :
 def p_return_instruccion(t) :
     'return_ins     : RRETURN expresion'
     t[0] = Return(t[2], t.lineno(1), find_column(input, t.slice[1]))
+
+# --------------------------------------------- CONTINUE ---------------------------------------------
+def p_continue_instruccion(t) :
+    'continue_ins     : RCONTINUE'
+    t[0] = Continue(t.lineno(1), find_column(input, t.slice[1]))
 
 # --------------------------------------------- TIPO ---------------------------------------------
 def p_tipo_dato(t):
@@ -670,6 +678,10 @@ def interprete(entrada):
                 ast.update_consola(err.__str__())
             if isinstance(value, Return): 
                 err = Excepcion("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+                ast.get_excepcion().append(err)
+                ast.update_consola(err.__str__())
+            if isinstance(value, Continue): 
+                err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
                 ast.get_excepcion().append(err)
                 ast.update_consola(err.__str__())
 

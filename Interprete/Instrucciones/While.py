@@ -5,6 +5,7 @@ from Interprete.TS.Tipo import Tipo
 from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
+from Interprete.Instrucciones.Continue import Continue
 
 class While(Instruccion):
     def __init__(self, condicion, instrucciones, fila, columna):
@@ -29,6 +30,7 @@ class While(Instruccion):
                             tree.update_consola(result.__str__())
                         if isinstance(result, Break): return None
                         if isinstance(result, Return): return result
+                        if isinstance(result, Continue): return result 
                 else:
                     break
             else:

@@ -4,6 +4,7 @@ from Interprete.TS.Tipo import Tipo
 from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
+from Interprete.Instrucciones.Continue import Continue
 
 
 class If(Instruccion):
@@ -31,6 +32,7 @@ class If(Instruccion):
                         tree.update_consola(result.__str__())
                     if isinstance(result, Break): return result
                     if isinstance(result, Return): return result
+                    if isinstance(result, Continue): return result
 
             else: # Aqui busca si la condicion es un else if o un else.
 
@@ -43,12 +45,14 @@ class If(Instruccion):
                             tree.update_consola(result.__str__()) 
                         if isinstance(result, Break): return result
                         if isinstance(result, Return): return result
+                        if isinstance(result, Continue): return result
 
                 elif self.elseIf != None:   # Aqui se ejecuta las instrucciones del else if.
                     result = self.elseIf.interpretar(tree, table) 
                     if isinstance(result, Exception): return result
                     if isinstance(result, Break): return result
                     if isinstance(result, Return): return result
+                    if isinstance(result, Continue): return result
 
         else:
             return Exception("Semantico", "Tipo de dato no booleano en IF.", self.fila, self.columna)
