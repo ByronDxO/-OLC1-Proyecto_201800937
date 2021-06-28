@@ -668,6 +668,14 @@ def interprete(entrada):
                 err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
                 ast.get_excepcion().append(err)
                 ast.update_consola(err.__str__())
+            if isinstance(value, Return): 
+                err = Exception("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+                ast.get_excepcion().append(err)
+                ast.update_consola(err.__str__())
+            if isinstance(value, Continue): 
+                err = Exception("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
+                ast.get_excepcion().append(err)
+                ast.update_consola(err.__str__())
 
 
     for instruccion in ast.get_instruccion():      # Verfiica con esta instruccion que el main no sea repetido
@@ -731,6 +739,14 @@ for instruccion in ast.get_instruccion():      # 1ERA PASADA (DECLARACIONES Y AS
             ast.update_consola(value.__str__())
         if isinstance(value, Break): 
             err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+        if isinstance(value, Return): 
+            err = Exception("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+        if isinstance(value, Continue): 
+            err = Exception("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
             ast.get_excepcion().append(err)
             ast.update_consola(err.__str__())
 

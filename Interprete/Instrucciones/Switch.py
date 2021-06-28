@@ -9,6 +9,7 @@ from Interprete.TS.Tipo import Tipo
 from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
+from Interprete.Instrucciones.Continue import Continue
 
 class Switch(Instruccion):
     def __init__(self, condicion, caso_instrucciones, default_instrucciones, fila, columna):
@@ -41,6 +42,7 @@ class Switch(Instruccion):
                             tree.update_consola(value.__str__())
                         if isinstance(value, Break): return None
                         if isinstance(value, Return): return value
+                        if isinstance(value, Continue): return None
 
             
             for instrucciones in self.default_instrucciones.get_instrucciones_default(): # si la condicion del switch y del case jamas fue encontrada, ejecuta el default.
@@ -51,6 +53,7 @@ class Switch(Instruccion):
                     tree.update_consola(result.__str__())
                 if isinstance(result, Break): return None
                 if isinstance(result, Return): return result
+                if isinstance(result, Continue): return None
 
             
                 
@@ -72,6 +75,7 @@ class Switch(Instruccion):
                             tree.update_consola(value.__str__())
                         if isinstance(value, Break): return None
                         if isinstance(value, Return): return value
+                        if isinstance(value, Continue): return None
             
             
         elif self.caso_instrucciones == None and self.default_instrucciones != None:    # Condicion 3 => [<DEFAULT>]
@@ -85,5 +89,6 @@ class Switch(Instruccion):
                     tree.update_consola(result.__str__())
                 if isinstance(result, Break): return None
                 if isinstance(result, Return): return result
+                if isinstance(result, Continue): return None
 
         
