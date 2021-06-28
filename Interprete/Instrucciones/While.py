@@ -30,7 +30,7 @@ class While(Instruccion):
                             tree.update_consola(result.__str__())
                         if isinstance(result, Break): return None
                         if isinstance(result, Return): return result
-                        if isinstance(result, Continue): return result 
+                        if isinstance(result, Continue): break
                 else:
                     break
             else:

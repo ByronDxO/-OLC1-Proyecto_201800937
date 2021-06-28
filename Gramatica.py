@@ -580,6 +580,10 @@ def p_expresion_llamada(t):
     '''expresion : llamada_ins'''
     t[0] = t[1]
 
+# def p_expresion_casteo(t):
+#     '''expresion : PARA tipo PARC expresion'''
+#     t[0] = Casteo(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+
 
 
 import Interprete.ply.yacc as yacc
@@ -683,11 +687,11 @@ def interprete(entrada):
                 ast.get_excepcion().append(err)
                 ast.update_consola(err.__str__())
             if isinstance(value, Return): 
-                err = Excepcion("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+                err = Exception("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
                 ast.get_excepcion().append(err)
                 ast.update_consola(err.__str__())
             if isinstance(value, Continue): 
-                err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
+                err = Exception("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
                 ast.get_excepcion().append(err)
                 ast.update_consola(err.__str__())
 
@@ -748,11 +752,11 @@ for instruccion in ast.get_instruccion():      # Verfiica con esta instruccion q
             ast.get_excepcion().append(err)
             ast.update_consola(err.__str__())
         if isinstance(value, Return): 
-            err = Excepcion("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+            err = Exception("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
             ast.get_excepcion().append(err)
             ast.update_consola(err.__str__())
         if isinstance(value, Continue): 
-            err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
+            err = Exception("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
             ast.get_excepcion().append(err)
             ast.update_consola(err.__str__())
 
