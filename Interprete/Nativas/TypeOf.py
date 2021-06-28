@@ -19,4 +19,17 @@ class TypeOf(Funcion):
             return Exception("Semantico", "Tipo de parametro de TypeOf es Nulo.", self.fila, self.columna)
         
         self.tipo = simbolo.get_tipo()
-        return type(simbolo.get_valor())
+
+        if self.tipo == Tipo.ENTERO:
+            return "INT"
+        elif self.tipo == Tipo.DECIMAL:
+            return "DOUBLE"
+        elif self.tipo == Tipo.BOOLEANO:
+            return "BOOLEAN"
+        elif self.tipo == Tipo.CHAR:
+            return "CHAR"      
+        elif self.tipo == Tipo.BOOLEANO:
+            return "BOOLEAN"
+        elif self.tipo == Tipo.CADENA:
+            return "STRING"
+

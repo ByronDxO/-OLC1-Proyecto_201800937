@@ -19,7 +19,7 @@ class Round(Funcion):
         if simbolo.get_tipo() != Tipo.DECIMAL and simbolo.get_tipo() != Tipo.ENTERO:
             return Exception("Semantico", "Tipo de parametro de Round no es un valor.", self.fila, self.columna)
         
-        self.tipo = simbolo.get_tipo()
+        self.tipo = Tipo.ENTERO
         if simbolo.get_tipo() == Tipo.DECIMAL:
             if str(simbolo.get_valor()).split('.')[1][0] >= '5':
                 return int(math.ceil(simbolo.get_valor()))
