@@ -216,6 +216,7 @@ from Interprete.Expresiones.Primitivos import Primitivos
 from Interprete.Expresiones.Aritmetica import Aritmetica
 from Interprete.Expresiones.Relacional import Relacional
 from Interprete.Expresiones.Logica import Logica
+from Interprete.Expresiones.Casteo import Casteo
 
 def p_init(t) :
     'init            : instrucciones'
@@ -580,9 +581,9 @@ def p_expresion_llamada(t):
     '''expresion : llamada_ins'''
     t[0] = t[1]
 
-# def p_expresion_casteo(t):
-#     '''expresion : PARA tipo PARC expresion'''
-#     t[0] = Casteo(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
+def p_expresion_casteo(t):
+    '''expresion : PARA tipo_funcion PARC expresion'''
+    t[0] = Casteo(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
 
 
 
