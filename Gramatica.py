@@ -3,6 +3,7 @@ from Interprete.TS.Exception import Exception
 from Interprete.Nativas.Truncate import Truncate 
 from Interprete.Nativas.ToUpper import ToUpper
 from Interprete.Nativas.ToLower import ToLower
+from Interprete.Nativas.TypeOf import TypeOf
 from Interprete.Nativas.Length import Length
 from Interprete.Nativas.Round import Round
 
@@ -631,6 +632,11 @@ def crearNativas(ast):          # CREACION Y DECLARACION DE LAS FUNCIONES NATIVA
     rround = Round(nombre, parametros, instrucciones, -1, -1)
     ast.addFuncion(rround)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
 
+    nombre = "typeof"
+    parametros = [{'tipoDato':Tipo.NULO,'identificador':'typeOf##Param1'}]
+    instrucciones = []
+    typeOf = TypeOf(nombre, parametros, instrucciones, -1, -1)
+    ast.addFuncion(typeOf)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
 
 def interprete(entrada):
     from Interprete.TS.Arbol import Arbol
@@ -694,3 +700,66 @@ def interprete(entrada):
     print(ast.get_consola())
 
     return ast
+
+
+f = open("./entrada.txt", "r")
+entrada = f.read()
+from Interprete.TS.Arbol import Arbol
+from Interprete.TS.TablaSimbolo import TablaSimbolo
+
+instrucciones = parse(entrada) # ARBOL AST
+ast = Arbol(instrucciones)
+TSGlobal = TablaSimbolo()
+ast.set_tabla_ts_global(TSGlobal)
+crearNativas(ast)
+for error in errores:                   # Aqui va a "Capturar o Guardar" todo error Lexico y Sintactico.
+    ast.get_excepcion().append(error)
+    ast.update_consola(error.__str__())
+
+for instruccion in ast.get_instruccion():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
+    if isinstance(instruccion, Funcion):
+        ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+    if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion):
+        value = instruccion.interpretar(ast,TSGlobal)
+        if isinstance(value, Exception) :
+            ast.get_excepcion().append(value)
+            ast.update_consola(value.__str__())
+        if isinstance(value, Break): 
+            err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+
+
+for instruccion in ast.get_instruccion():      # Verfiica con esta instruccion que el main no sea repetido
+    i = 0
+    if isinstance(instruccion, Main):
+        i += 1
+        if i == 2: # VERIFICAR LA DUPLICIDAD
+            err = Exception("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+            break
+        value = instruccion.interpretar(ast,TSGlobal)
+        if isinstance(value, Exception) :
+            ast.get_excepcion().append(value)
+            ast.update_consola(value.__str__())
+        if isinstance(value, Break): 
+            err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+        if isinstance(value, Return): 
+            err = Excepcion("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+        if isinstance(value, Continue): 
+            err = Excepcion("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
+            ast.get_excepcion().append(err)
+            ast.update_consola(err.__str__())
+
+for instruccion in ast.get_instruccion():    # Ultima vez que lo reccore, va a buscar funciones fuera del main
+    if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, Funcion)):
+        err = Exception("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
+        ast.get_excepcion().append(err)
+        ast.update_consola(err.__str__())
+
+print(ast.get_consola())

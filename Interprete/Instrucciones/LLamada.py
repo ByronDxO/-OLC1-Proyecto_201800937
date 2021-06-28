@@ -41,8 +41,15 @@ class Llamada(Instruccion):
 
                 elif result.parametros[contador]["identificador"] == "round##Param1":  # VERIFICACION DE TIPO
                     # CREACION DE SIMBOLO E INGRESARLO A LA TABLA DE SIMBOLOS
-                    
+
                     simbolo = Simbolo(str(result.parametros[contador]['identificador']), result.parametros[contador]['tipoDato'], self.fila, self.columna, resultExpresion)
+                    resultTabla = nuevaTabla.setTabla(simbolo)
+                    if isinstance(resultTabla, Exception): return resultTabla
+
+                elif result.parametros[contador]["identificador"] == "typeOf##Param1":  # VERIFICACION DE TIPO
+                    # CREACION DE SIMBOLO E INGRESARLO A LA TABLA DE SIMBOLOS
+                    result.parametros[contador]['tipoDato'] = expresion.tipo
+                    simbolo = Simbolo(str(result.parametros[contador]['identificador']), expresion.tipo, self.fila, self.columna, resultExpresion)
                     resultTabla = nuevaTabla.setTabla(simbolo)
                     if isinstance(resultTabla, Exception): return resultTabla
 
