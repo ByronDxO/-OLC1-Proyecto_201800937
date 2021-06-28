@@ -1,6 +1,6 @@
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Exception import Exception
-from Interprete.TS.Tipo import *
+from Interprete.TS.Tipo import Tipo
 
 class Casteo(Instruccion):
     def __init__(self, tipo, expresion, fila, columna):
@@ -13,74 +13,83 @@ class Casteo(Instruccion):
     def interpretar(self, tree, table):
         val = self.expresion.interpretar(tree, table)
         
-        if self.tipo == Tipo.DECIMAL: # Este es el tipo que se quiere convertir.
-            if self.expresion.tipo == Tipo.ENTERO: # Este es el tipo de la expresion(int).                      -> Decimal a int
+        if self.tipo == Tipo.DECIMAL: # Tipo a DOUBLE.
+            
+            if self.expresion.tipo == Tipo.ENTERO: # Este es el tipo de la expresion(int).                      -> Int a Double
                 try:
                     return float(self.obtenerVal(self.expresion.tipo, val))
-                except:
-                    return Exception("Semantico", "No se puede castear para Double a Int.", self.fila, self.columna)
-            elif self.expresion.tipo == Tipo.CADENA: # Este es el tipo de la expresion(String).                 -> Decimal a String
-                try:
-                    return float(self.obtenerVal(self.expresion.tipo, val))
-                except:
-                    return Exception("Semantico", "No se puede castear para Double a String.", self.fila, self.columna)
-            return Exception("Semantico", "Tipo Erroneo de casteo para Double.", self.fila, self.columna)
-
-        elif self.tipo == Tipo.ENTERO:
-            if self.expresion.tipo == Tipo.DECIMAL:# Este es el tipo de la expresion(Double).                    -> Int a Double
-                try:
-                    return int(self.obtenerVal(self.expresion.tipo, val))
                 except:
                     return Exception("Semantico", "No se puede castear para Int a Double.", self.fila, self.columna)
-            elif self.expresion.tipo == Tipo.CADENA:# Este es el tipo de la expresion(String).                   -> Int a String
+            elif self.expresion.tipo == Tipo.CADENA: # Este es el tipo de la expresion(String).                 -> String a Double
+                try:
+                    return float(self.obtenerVal(self.expresion.tipo, val))
+                except:
+                    return Exception("Semantico", "No se puede castear para String a Double.", self.fila, self.columna)
+            elif self.expresion.tipo == Tipo.CHAR: # Este es el tipo de la expresion(Char).                     -> Char a Double
+                try:
+                    return float(ord(self.obtenerVal(self.expresion.tipo, val)))
+                except:
+                    return Exception("Semantico", "No se puede castear para Char a Double.", self.fila, self.columna)
+            return Exception("Semantico", "Tipo Erroneo de casteo para Double.", self.fila, self.columna)
+
+
+        elif self.tipo == Tipo.ENTERO:# Tipo a INT
+            #
+            if self.expresion.tipo == Tipo.DECIMAL:# Este es el tipo de la expresion(Double).                    -> Double a Int
                 try:
                     return int(self.obtenerVal(self.expresion.tipo, val))
                 except:
-                    return Exception("Semantico", "No se puede castear para Int a String.", self.fila, self.columna)
-            elif self.expresion.tipo == Tipo.CHAR:# Este es el tipo de la expresion(Char).                        -> Int a Char
+                    return Exception("Semantico", "No se puede castear para Double a Int.", self.fila, self.columna)
+
+            elif self.expresion.tipo == Tipo.CADENA:# Este es el tipo de la expresion(String).                   -> String a Int
                 try:
                     return int(self.obtenerVal(self.expresion.tipo, val))
                 except:
-                    return Exception("Semantico", "No se puede castear para Int a Char.", self.fila, self.columna)
+                    return Exception("Semantico", "No se puede castear para String a Int.", self.fila, self.columna)
+
+            elif self.expresion.tipo == Tipo.CHAR:# Este es el tipo de la expresion(Char).                        -> Char a Int
+                try:
+                    return ord(self.obtenerVal(self.expresion.tipo, val))
+                except:
+                    return Exception("Semantico", "No se puede castear para Char a Int.", self.fila, self.columna)
             return Exception("Semantico", "Tipo Erroneo de casteo para Int.", self.fila, self.columna)
 
         elif self.tipo == Tipo.CHAR:
-            if self.expresion.tipo == Tipo.DECIMAL:# Este es el tipo de la expresion(Double).                    -> Char a Double
+            if self.expresion.tipo == Tipo.ENTERO:# Este es el tipo de la expresion(Int).                          -> Int a Char
+                try:
+                    return chr(self.obtenerVal(self.expresion.tipo, val))
+                except:
+                    return Exception("Semantico", "No se puede castear para Int a Char.", self.fila, self.columna)
+            return Exception("Semantico", "Tipo Erroneo de casteo para Char.", self.fila, self.columna)
+                
+        elif self.tipo == Tipo.CADENA:
+            if self.expresion.tipo == Tipo.DECIMAL:# Este es el tipo de la expresion(Double).                    -> Double a String
                 try:
                     return str(self.obtenerVal(self.expresion.tipo, val))
                 except:
-                    return Exception("Semantico", "No se puede castear para Int a Double.", self.fila, self.columna)
-            elif self.expresion.tipo == Tipo.ENTERO:# Este es el tipo de la expresion(String).                   -> Char a Int
+                    return Exception("Semantico", "No se puede castear para Double a String.", self.fila, self.columna)
+            elif self.expresion.tipo == Tipo.ENTERO:# Este es el tipo de la expresion(Int).                        -> Int a String
                 try:
                     return str(self.obtenerVal(self.expresion.tipo, val))
                 except:
                     return Exception("Semantico", "No se puede castear para Int a String.", self.fila, self.columna)
             return Exception("Semantico", "Tipo Erroneo de casteo para Char.", self.fila, self.columna)
-                
-        elif self.tipo == Tipo.CADENA:
-            if self.expresion.tipo == Tipo.DECIMAL:# Este es el tipo de la expresion(Double).                    -> String a Double
+
+        elif self.tipo == Tipo.BOOLEANO:
+            if self.expresion.tipo == Tipo.CADENA:# Este es el tipo de la expresion(String).                   -> String a Boolean
                 try:
                     return str(self.obtenerVal(self.expresion.tipo, val))
                 except:
-                    return Exception("Semantico", "No se puede castear para String a Double.", self.fila, self.columna)
-            elif self.expresion.tipo == Tipo.ENTERO:# Este es el tipo de la expresion(String).                   -> String a Int
-                try:
-                    return str(self.obtenerVal(self.expresion.tipo, val))
-                except:
-                    return Exception("Semantico", "No se puede castear para String a Int.", self.fila, self.columna)
-            elif self.expresion.tipo == Tipo.BOOLEANO:# Este es el tipo de la expresion(String).                   -> Char a Int
-                try:
-                    return str(self.obtenerVal(self.expresion.tipo, val))
-                except:
-                    return Exception("Semantico", "No se puede castear para String a Int.", self.fila, self.columna)
-            return Exception("Semantico", "Tipo Erroneo de casteo para Char.", self.fila, self.columna)
+                    return Exception("Semantico", "No se puede castear para String a Boolean.", self.fila, self.columna)
+            return Exception("Semantico", "Tipo Erroneo de casteo para Boolean.", self.fila, self.columna)
+        return Exception("Semantico", "Tipo erroneo para casteo.", self.fila, self.columna)
 
     def obtenerVal(self, tipo, val):
-        if tipo == TIPO.ENTERO:
+        if tipo == Tipo.ENTERO:
             return int(val)
-        elif tipo == TIPO.DECIMAL:
+        elif tipo == Tipo.DECIMAL:
             return float(val)
-        elif tipo == TIPO.BOOLEANO:
+        elif tipo == Tipo.BOOLEANO:
             return bool(val)
         return str(val)
 

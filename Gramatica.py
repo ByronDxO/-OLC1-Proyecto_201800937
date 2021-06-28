@@ -27,7 +27,7 @@ reservadas = {
     'default'  : 'RDEFAULT',
     'return'   : 'RRETURN',
     'int'      : 'RINT',
-    'dobule'   : 'RDOUBLE',
+    'double'   : 'RDOUBLE',
     'string'   : 'RSTRING',
     'char'     : 'RCHAR',
     'boolean'  : 'RBOOLEAN',
