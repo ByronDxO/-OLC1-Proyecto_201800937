@@ -32,6 +32,7 @@ reservadas = {
     'char'     : 'RCHAR',
     'boolean'  : 'RBOOLEAN',
     'continue' : 'RCONTINUE',
+    'read'     : 'RREAD',
 }
 
 
@@ -217,6 +218,7 @@ from Interprete.Expresiones.Aritmetica import Aritmetica
 from Interprete.Expresiones.Relacional import Relacional
 from Interprete.Expresiones.Logica import Logica
 from Interprete.Expresiones.Casteo import Casteo
+from Interprete.Expresiones.Read import Read
 
 def p_init(t) :
     'init            : instrucciones'
@@ -585,6 +587,11 @@ def p_expresion_casteo(t):
     '''expresion : PARA tipo_funcion PARC expresion'''
     t[0] = Casteo(t[2], t[4], t.lineno(1), find_column(input, t.slice[1]))
 
+def p_expresion_read(t):
+    '''expresion : RREAD PARA PARC'''
+    t[0] = Read(t.lineno(1), find_column(input, t.slice[1]))
+
+
 
 
 import Interprete.ply.yacc as yacc
@@ -643,7 +650,7 @@ def crearNativas(ast):          # CREACION Y DECLARACION DE LAS FUNCIONES NATIVA
     typeOf = TypeOf(nombre, parametros, instrucciones, -1, -1)
     ast.addFuncion(typeOf)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
 
-def interprete(entrada):
+def interprete(entrada, consola):
     from Interprete.TS.Arbol import Arbol
     from Interprete.TS.TablaSimbolo import TablaSimbolo
 
@@ -651,6 +658,7 @@ def interprete(entrada):
     ast = Arbol(instrucciones)
     TSGlobal = TablaSimbolo()
     ast.set_tabla_ts_global(TSGlobal)
+    ast.setConsolaSalida(consola)
     crearNativas(ast)
     for error in errores:                   # Aqui va a "Capturar o Guardar" todo error Lexico y Sintactico.
         ast.get_excepcion().append(error)
@@ -715,72 +723,72 @@ def interprete(entrada):
     return ast
 
 
-f = open("./entrada.txt", "r")
-entrada = f.read()
-from Interprete.TS.Arbol import Arbol
-from Interprete.TS.TablaSimbolo import TablaSimbolo
+# f = open("./entrada.txt", "r")
+# entrada = f.read()
+# from Interprete.TS.Arbol import Arbol
+# from Interprete.TS.TablaSimbolo import TablaSimbolo
 
-instrucciones = parse(entrada) # ARBOL AST
-ast = Arbol(instrucciones)
-TSGlobal = TablaSimbolo()
-ast.set_tabla_ts_global(TSGlobal)
-crearNativas(ast)
-for error in errores:                   # Aqui va a "Capturar o Guardar" todo error Lexico y Sintactico.
-    ast.get_excepcion().append(error)
-    ast.update_consola(error.__str__())
+# instrucciones = parse(entrada) # ARBOL AST
+# ast = Arbol(instrucciones)
+# TSGlobal = TablaSimbolo()
+# ast.set_tabla_ts_global(TSGlobal)
+# crearNativas(ast)
+# for error in errores:                   # Aqui va a "Capturar o Guardar" todo error Lexico y Sintactico.
+#     ast.get_excepcion().append(error)
+#     ast.update_consola(error.__str__())
 
-for instruccion in ast.get_instruccion():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
-    if isinstance(instruccion, Funcion):
-        ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
-    if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion):
-        value = instruccion.interpretar(ast,TSGlobal)
-        if isinstance(value, Exception) :
-            ast.get_excepcion().append(value)
-            ast.update_consola(value.__str__())
-        if isinstance(value, Break): 
-            err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.get_excepcion().append(err)
-            ast.update_consola(err.__str__())
-        if isinstance(value, Return): 
-            err = Exception("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.get_excepcion().append(err)
-            ast.update_consola(err.__str__())
-        if isinstance(value, Continue): 
-            err = Exception("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.get_excepcion().append(err)
-            ast.update_consola(err.__str__())
+# for instruccion in ast.get_instruccion():      # 1ERA PASADA (DECLARACIONES Y ASIGNACIONES)
+#     if isinstance(instruccion, Funcion):
+#         ast.addFuncion(instruccion)     # GUARDAR LA FUNCION EN "MEMORIA" (EN EL ARBOL)
+#     if isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion):
+#         value = instruccion.interpretar(ast,TSGlobal)
+#         if isinstance(value, Exception) :
+#             ast.get_excepcion().append(value)
+#             ast.update_consola(value.__str__())
+#         if isinstance(value, Break): 
+#             err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+#             ast.get_excepcion().append(err)
+#             ast.update_consola(err.__str__())
+#         if isinstance(value, Return): 
+#             err = Exception("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+#             ast.get_excepcion().append(err)
+#             ast.update_consola(err.__str__())
+#         if isinstance(value, Continue): 
+#             err = Exception("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
+#             ast.get_excepcion().append(err)
+#             ast.update_consola(err.__str__())
 
 
-for instruccion in ast.get_instruccion():      # Verfiica con esta instruccion que el main no sea repetido
-    i = 0
-    if isinstance(instruccion, Main):
-        i += 1
-        if i == 2: # VERIFICAR LA DUPLICIDAD
-            err = Exception("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
-            ast.get_excepcion().append(err)
-            ast.update_consola(err.__str__())
-            break
-        value = instruccion.interpretar(ast,TSGlobal)
-        if isinstance(value, Exception) :
-            ast.get_excepcion().append(value)
-            ast.update_consola(value.__str__())
-        if isinstance(value, Break): 
-            err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.get_excepcion().append(err)
-            ast.update_consola(err.__str__())
-        if isinstance(value, Return): 
-            err = Exception("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.get_excepcion().append(err)
-            ast.update_consola(err.__str__())
-        if isinstance(value, Continue): 
-            err = Exception("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
-            ast.get_excepcion().append(err)
-            ast.update_consola(err.__str__())
+# for instruccion in ast.get_instruccion():      # Verfiica con esta instruccion que el main no sea repetido
+#     i = 0
+#     if isinstance(instruccion, Main):
+#         i += 1
+#         if i == 2: # VERIFICAR LA DUPLICIDAD
+#             err = Exception("Semantico", "Existen 2 funciones Main", instruccion.fila, instruccion.columna)
+#             ast.get_excepcion().append(err)
+#             ast.update_consola(err.__str__())
+#             break
+#         value = instruccion.interpretar(ast,TSGlobal)
+#         if isinstance(value, Exception) :
+#             ast.get_excepcion().append(value)
+#             ast.update_consola(value.__str__())
+#         if isinstance(value, Break): 
+#             err = Exception("Semantico", "Sentencia BREAK fuera de ciclo", instruccion.fila, instruccion.columna)
+#             ast.get_excepcion().append(err)
+#             ast.update_consola(err.__str__())
+#         if isinstance(value, Return): 
+#             err = Exception("Semantico", "Sentencia RETURN fuera de ciclo", instruccion.fila, instruccion.columna)
+#             ast.get_excepcion().append(err)
+#             ast.update_consola(err.__str__())
+#         if isinstance(value, Continue): 
+#             err = Exception("Semantico", "Sentencia CONTINUE fuera de ciclo", instruccion.fila, instruccion.columna)
+#             ast.get_excepcion().append(err)
+#             ast.update_consola(err.__str__())
 
-for instruccion in ast.get_instruccion():    # Ultima vez que lo reccore, va a buscar funciones fuera del main
-    if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, Funcion)):
-        err = Exception("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
-        ast.get_excepcion().append(err)
-        ast.update_consola(err.__str__())
+# for instruccion in ast.get_instruccion():    # Ultima vez que lo reccore, va a buscar funciones fuera del main
+#     if not (isinstance(instruccion, Main) or isinstance(instruccion, Declaracion) or isinstance(instruccion, Asignacion) or isinstance(instruccion, Funcion)):
+#         err = Exception("Semantico", "Sentencias fuera de Main", instruccion.fila, instruccion.columna)
+#         ast.get_excepcion().append(err)
+#         ast.update_consola(err.__str__())
 
-print(ast.get_consola())
+# print(ast.get_consola())

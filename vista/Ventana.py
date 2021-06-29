@@ -395,10 +395,6 @@ class Ventana():
         for tokens_reservadas in global_lista:
             if  (tokens_reservadas[1].lower() == "print")     or \
                 (tokens_reservadas[1].lower() == "var")       or \
-                (tokens_reservadas[1].lower() == "int")       or \
-                (tokens_reservadas[1].lower() == "string")    or \
-                (tokens_reservadas[1].lower() == "double")    or \
-                (tokens_reservadas[1].lower() == "var")       or \
                 (tokens_reservadas[1].lower() == "true")      or \
                 (tokens_reservadas[1].lower() == "false")     or \
                 (tokens_reservadas[1].lower() == "if")        or \
@@ -411,6 +407,11 @@ class Ventana():
                 (tokens_reservadas[1].lower() == "switch")    or \
                 (tokens_reservadas[1].lower() == "case")      or \
                 (tokens_reservadas[1].lower() == "default")   or \
+                (tokens_reservadas[1].lower() == "int")       or \
+                (tokens_reservadas[1].lower() == "double")    or \
+                (tokens_reservadas[1].lower() == "string")    or \
+                (tokens_reservadas[1].lower() == "char")      or \
+                (tokens_reservadas[1].lower() == "boolean")   or \
                 (tokens_reservadas[1].lower() == "continue")  or \
                 (tokens_reservadas[1].lower() == "return")    or \
                 (tokens_reservadas[1].lower() == "read"):
@@ -429,7 +430,7 @@ class Ventana():
         for array in self.set_paint(result):
             self.scroll.text.insert(INSERT, array[1], array[0])
         
-        AST = prueba.interprete(result)
+        AST = prueba.interprete(result, self.scroll_consola)
 
         self.scroll_consola.delete("1.0","end")
         self.scroll_consola.insert(tk.INSERT, AST.get_consola())

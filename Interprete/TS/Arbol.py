@@ -3,6 +3,7 @@
     Nodos -> Los nodos del AST siven para realizar todas las instrucciones, funciones, operaciones, entre otros, por medio del interprete.
     Instruccion -> Sera una clase abstracta
 '''
+from tkinter import *
 class Arbol():
     
     def __init__(self, instruccion):
@@ -11,6 +12,7 @@ class Arbol():
         self.excepcion = []
         self.consola = ""
         self.tabla_ts_global = None
+        self.consolaSalida = None
 
     def get_instruccion(self):
         return self.instruccion
@@ -50,3 +52,15 @@ class Arbol():
 
     def addFuncion(self, funcion):
         self.funciones.append(funcion)
+        
+    # se implento para que en el read se actualice la consola.
+    def getConsolaSalida(self):
+        return self.consolaSalida
+        
+    def setConsolaSalida(self, consola):
+        self.consolaSalida = consola
+
+    def showConsolaSalida(self, consola):
+        self.consolaSalida.delete("1.0","end")
+        self.consolaSalida.insert(INSERT, consola)
+

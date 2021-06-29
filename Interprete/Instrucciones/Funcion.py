@@ -4,7 +4,7 @@ from Interprete.TS.Exception import Exception
 from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
-
+from Interprete.Instrucciones.Continue import Continue
 
 class Funcion(Instruccion):
     def __init__(self, nombre, parametros, instrucciones, fila, columna):
@@ -27,6 +27,10 @@ class Funcion(Instruccion):
 
             if isinstance(value, Break): 
                 err = Exception("Semantico", "Sentencia Break fuera de ciclo", instruccion.fila, instruccion.columna)
+                tree.get_excepcion().append(err)
+                tree.update_consola(err.__str__())
+            if isinstance(value, Continue): 
+                err = Exception("Semantico", "Sentencia Continue fuera de ciclo", instruccion.fila, instruccion.columna)
                 tree.get_excepcion().append(err)
                 tree.update_consola(err.__str__())
 
