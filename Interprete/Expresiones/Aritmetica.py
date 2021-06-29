@@ -1,4 +1,4 @@
-from re import A
+from Interprete.Abstract.NodoAST import NodoAST
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Exception import Exception
 from Interprete.TS.Tipo import Tipo, Operador_Aritmetico
@@ -220,7 +220,17 @@ class Aritmetica(Instruccion):
         
         return Exception("Semantico", "Tipo de Operacion no Especificado.", self.fila, self.columna)
 
-
+    def getNodo(self):
+        nodo = NodoAST("ARITMETICA")
+        if self.OperacionDer != None:
+            nodo.agregarHijoNodo(self.OperacionIzq.getNodo())
+            nodo.agregarHijo(str(self.operador))
+            nodo.agregarHijoNodo(self.OperacionDer.getNodo())
+        else:
+            nodo.agregarHijo(str(self.operador))
+            nodo.agregarHijoNodo(self.OperacionIzq.getNodo())
+        
+        return nodo
 
     def obtenerVal(self, tipo, val):
         if tipo == Tipo.ENTERO:

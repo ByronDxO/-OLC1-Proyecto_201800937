@@ -5,6 +5,7 @@ from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
 from Interprete.Instrucciones.Continue import Continue
+from Interprete.Abstract.NodoAST import NodoAST
 
 class Funcion(Instruccion):
     def __init__(self, nombre, parametros, instrucciones, fila, columna):
@@ -38,3 +39,23 @@ class Funcion(Instruccion):
                 self.tipo = value.tipo
                 return value.result
         return None
+
+    def getNodo(self):
+        nodo = NodoAST("FUNCION")
+
+        nodo.agregarHijo(str(self.nombre))
+
+        parametros = NodoAST("PARAMETROS")
+        for param in self.parametros:
+            parametro = NodoAST("PARAMETRO")
+            parametro.agregarHijo(param["tipoDato"])
+            parametro.agregarHijo(param["identificador"])
+            parametros.agregarHijoNodo(parametro)
+        nodo.agregarHijoNodo(parametros)
+
+        instrucciones = NodoAST("INSTRUCCIONES")
+        for instruccion in self.instrucciones:
+            instrucciones.agregarHijoNodo(instruccion.getNodo())
+        nodo.agregarHijoNodo(instrucciones)
+        
+        return nodo

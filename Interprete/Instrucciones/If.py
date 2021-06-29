@@ -5,6 +5,7 @@ from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
 from Interprete.Instrucciones.Continue import Continue
+from Interprete.Abstract.NodoAST import NodoAST
 
 
 class If(Instruccion):
@@ -56,3 +57,21 @@ class If(Instruccion):
 
         else:
             return Exception("Semantico", "Tipo de dato no booleano en IF.", self.fila, self.columna)
+
+    def getNodo(self):
+        nodo = NodoAST("IF")
+        nodo.agregarHijoNodo(self.condicion.getNodo())
+        instruccionesIf = NodoAST("INSTRUCCIONES IF")
+        for instr in self.instruccionesIf:
+            instruccionesIf.agregarHijoNodo(instr.getNodo())
+        nodo.agregarHijoNodo(instruccionesIf)
+
+        if self.instruccionesElse != None:
+            instruccionesElse = NodoAST("INSTRUCCIONES ELSE")
+            for instr in self.instruccionesElse:
+                instruccionesElse.agregarHijoNodo(instr.getNodo())
+            nodo.agregarHijoNodo(instruccionesElse) 
+        elif self.elseIf != None:
+            nodo.agregarHijoNodo(self.elseIf.getNodo())
+
+        return nodo

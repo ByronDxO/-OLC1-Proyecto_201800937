@@ -1,6 +1,7 @@
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Exception import Exception
 from Interprete.TS.Tipo import Tipo
+from Interprete.Abstract.NodoAST import NodoAST
 
 class Casteo(Instruccion):
     def __init__(self, tipo, expresion, fila, columna):
@@ -83,6 +84,13 @@ class Casteo(Instruccion):
                     return Exception("Semantico", "No se puede castear para String a Boolean.", self.fila, self.columna)
             return Exception("Semantico", "Tipo Erroneo de casteo para Boolean.", self.fila, self.columna)
         return Exception("Semantico", "Tipo erroneo para casteo.", self.fila, self.columna)
+
+    def getNodo(self):
+        nodo = NodoAST("CASTEO")
+        nodo.agregarHijo(str(self.tipo))
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo
+
 
     def obtenerVal(self, tipo, val):
         if tipo == Tipo.ENTERO:

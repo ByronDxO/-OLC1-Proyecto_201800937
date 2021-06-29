@@ -10,6 +10,7 @@ from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
 from Interprete.Instrucciones.Continue import Continue
+from Interprete.Abstract.NodoAST import NodoAST
 
 class Switch(Instruccion):
     def __init__(self, condicion, caso_instrucciones, default_instrucciones, fila, columna):
@@ -91,4 +92,21 @@ class Switch(Instruccion):
                 if isinstance(result, Return): return result
                 if isinstance(result, Continue): return None
 
+    def getNodo(self):
+        nodo = NodoAST("SWITCH")
+
+        nodo.agregarHijoNodo(self.condicion.getNodo())
+        if self.caso_instrucciones != None:
+            instruccionesDefault = NodoAST("INSTRUCCIONES CASE")
+            for instr in self.caso_instrucciones:
+                instruccionesDefault.agregarHijoNodo(instr.getNodo())
+            nodo.agregarHijoNodo(instruccionesDefault)
+
+        if self.default_instrucciones != None:
+            instruccionesDefault = NodoAST("DEFAULT")
+            for instr in self.default_instrucciones.get_instrucciones_default():
+                instruccionesDefault.agregarHijoNodo(instr.getNodo())
+            nodo.agregarHijoNodo(instruccionesDefault)
+        
+        return nodo
         

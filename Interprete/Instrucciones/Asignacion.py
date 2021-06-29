@@ -2,6 +2,7 @@ from Interprete.Expresiones.Identificador import Identificador
 from Interprete.TS.Exception import Exception
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Simbolo import Simbolo
+from Interprete.Abstract.NodoAST import NodoAST
 
 
 class Asignacion(Instruccion):
@@ -22,3 +23,10 @@ class Asignacion(Instruccion):
         if isinstance(result, Exception): return result
         return None
 
+    def getNodo(self):
+        nodo = NodoAST("ASIGNACION")
+
+        nodo.agregarHijo(str(self.expresion.tipo))
+        nodo.agregarHijo(str(self.identificador))
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo

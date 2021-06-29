@@ -1,5 +1,6 @@
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Tipo import Tipo
+from Interprete.Abstract.NodoAST import NodoAST
 
 
 from tkinter import *
@@ -18,6 +19,10 @@ class Read(Instruccion):
         # print("Ingreso a un READ. Ingrese el valor\r")
         
         tree.showConsolaSalida(tree.get_consola())
-        lectura = simpledialog.askstring("Read()", "ingrese dato", parent=tree.getConsolaSalida())
+        lectura = simpledialog.askstring("Read()", "Ingrese el Valor:", parent=tree.getConsolaSalida())
         
         return lectura
+
+    def getNodo(self):
+        nodo = NodoAST("READ")
+        return nodo

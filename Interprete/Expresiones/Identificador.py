@@ -1,5 +1,6 @@
 from Interprete.TS.Exception import Exception
 from Interprete.Abstract.Instruccion import Instruccion
+from Interprete.Abstract.NodoAST import NodoAST
 
 
 class Identificador(Instruccion):
@@ -18,3 +19,9 @@ class Identificador(Instruccion):
         
         
         return simbolo.get_valor()
+
+
+    def getNodo(self):
+        nodo = NodoAST("IDENTIFICADOR")
+        nodo.agregarHijo(str(self.identificador))
+        return nodo

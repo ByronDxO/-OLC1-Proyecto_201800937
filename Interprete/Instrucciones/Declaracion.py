@@ -1,6 +1,7 @@
 from Interprete.TS.Exception import Exception
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Simbolo import Simbolo
+from Interprete.Abstract.NodoAST import NodoAST
 
 
 class Declaracion(Instruccion):
@@ -28,3 +29,11 @@ class Declaracion(Instruccion):
         
         return None
 
+    
+    def getNodo(self):
+        nodo = NodoAST("DECLARACION")
+        nodo.agregarHijo(str(self.tipo))
+        nodo.agregarHijo(str(self.identificador))
+        if self.expresion != None:
+            nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo

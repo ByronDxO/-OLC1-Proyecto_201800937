@@ -3,6 +3,7 @@ from Interprete.Expresiones.Identificador import Identificador
 from Interprete.TS.Exception import Exception
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Simbolo import Simbolo
+from Interprete.Abstract.NodoAST import NodoAST
 
 
 class IncrementoDecremento(Instruccion):
@@ -44,3 +45,8 @@ class IncrementoDecremento(Instruccion):
 
         return result
 
+    def getNodo(self):
+        nodo = NodoAST("ASIGNACION")
+        nodo.agregarHijo(str(self.tipo))
+        nodo.agregarHijo(str(self.identificador))
+        return nodo

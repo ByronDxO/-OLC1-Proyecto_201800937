@@ -1,6 +1,7 @@
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Exception import Exception
 from Interprete.TS.Tipo import Tipo, Operador_Relacional
+from Interprete.Abstract.NodoAST import NodoAST
 
 class Relacional(Instruccion):
 
@@ -151,6 +152,15 @@ class Relacional(Instruccion):
             return Exception("Semantico", "Tipo Erroneo de operacion para >.", self.fila, self.columna)
 
         return Exception("Semantico", "Tipo de Operacion no Especificado.", self.fila, self.columna)
+
+    def getNodo(self):
+        nodo = NodoAST("RELACIONAL")
+        nodo.agregarHijoNodo(self.OperacionIzq.getNodo())
+        nodo.agregarHijo(str(self.operador))
+        nodo.agregarHijoNodo(self.OperacionDer.getNodo())
+        
+        return nodo
+
 
     def obtenerVal(self, tipo, val):
         if tipo == Tipo.ENTERO:

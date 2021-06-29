@@ -2,6 +2,7 @@ from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Exception import Exception
 from Interprete.TS.Tipo import Tipo
 from Interprete.TS.TablaSimbolo import TablaSimbolo
+from Interprete.Abstract.NodoAST import NodoAST
 
 class Return(Instruccion):
     def __init__(self, expresion, fila, columna):
@@ -19,3 +20,11 @@ class Return(Instruccion):
         self.result = result            # Aqui ya optiene el resultado de la expresion a interpretar.
 
         return self
+
+
+    def getNodo(self):
+        nodo = NodoAST("RETURN")
+
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+
+        return nodo

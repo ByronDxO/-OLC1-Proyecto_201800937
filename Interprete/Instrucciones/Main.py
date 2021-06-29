@@ -4,6 +4,7 @@ from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
 from Interprete.Instrucciones.Continue import Continue
+from Interprete.Abstract.NodoAST import NodoAST
 
 
 class Main(Instruccion):
@@ -31,3 +32,12 @@ class Main(Instruccion):
                 err = Exception("Semantico", "Sentencia Continue fuera de ciclo", instruccion.fila, instruccion.columna)
                 tree.get_excepcion().append(err)
                 tree.update_consola(err.__str__())
+
+    def getNodo(self):
+        nodo = NodoAST("MAIN")
+
+        instrucciones = NodoAST("INSTRUCCIONES")
+        for instr in self.instrucciones:
+            instrucciones.agregarHijoNodo(instr.getNodo())
+        nodo.agregarHijoNodo(instrucciones)
+        return nodo

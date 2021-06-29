@@ -8,6 +8,7 @@ from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
 from Interprete.Instrucciones.Continue import Continue
+from Interprete.Abstract.NodoAST import NodoAST
 
 class For(Instruccion):
     def __init__(self, variable, condicion, actualizacion, instrucciones,  fila, columna):
@@ -50,3 +51,16 @@ class For(Instruccion):
                     break
             else:
                 return Exception("Semantico", "Tipo de dato no booleano en For.", self.fila, self.columna)
+
+
+    def getNodo(self):
+        nodo = NodoAST("FOR")
+        nodo.agregarHijoNodo(self.variable.getNodo())
+        nodo.agregarHijoNodo(self.condicion.getNodo())
+        instrucciones = NodoAST("INSTRUCCIONES")
+        for instruccion in self.instrucciones:
+            instrucciones.agregarHijoNodo(instruccion.getNodo())
+        nodo.agregarHijoNodo(instrucciones)
+
+        nodo.agregarHijoNodo(self.actualizacion.getNodo())
+        return nodo

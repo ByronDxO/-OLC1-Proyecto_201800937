@@ -3,4 +3,6 @@ parser.out
 parsetab.py
 entrada.txt
 entrada2.txt
-prueba.py
+ast.dot
+parser.out
+ast.pdf

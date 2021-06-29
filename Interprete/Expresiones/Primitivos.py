@@ -1,4 +1,5 @@
 from Interprete.Abstract.Instruccion import Instruccion
+from Interprete.Abstract.NodoAST import NodoAST
 
 class Primitivos(Instruccion):
     
@@ -10,3 +11,8 @@ class Primitivos(Instruccion):
     
     def interpretar(self, tree, table):
         return self.valor
+
+    def getNodo(self):
+        nodo = NodoAST("PRIMITIVO")
+        nodo.agregarHijo(str(self.valor))
+        return nodo

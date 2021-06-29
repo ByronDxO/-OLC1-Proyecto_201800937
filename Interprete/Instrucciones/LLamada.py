@@ -4,6 +4,7 @@ from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.TS.Simbolo import Simbolo
 from Interprete.Instrucciones.Funcion import Funcion
+from Interprete.Abstract.NodoAST import NodoAST
 
 
 class Llamada(Instruccion):
@@ -66,3 +67,15 @@ class Llamada(Instruccion):
         self.tipo = result.tipo
         
         return value
+
+
+    def getNodo(self):
+        nodo = NodoAST("LLAMADA A FUNCION")
+        nodo.agregarHijo(str(self.nombre))
+
+        parametros = NodoAST("PARAMETROS")
+        for param in self.parametros:
+            parametros.agregarHijoNodo(param.getNodo())
+        nodo.agregarHijoNodo(parametros)
+        
+        return nodo

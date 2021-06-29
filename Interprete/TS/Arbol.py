@@ -13,6 +13,8 @@ class Arbol():
         self.consola = ""
         self.tabla_ts_global = None
         self.consolaSalida = None
+        self.dot = ""
+        self.contador = 0
 
     def get_instruccion(self):
         return self.instruccion
@@ -63,4 +65,22 @@ class Arbol():
     def showConsolaSalida(self, consola):
         self.consolaSalida.delete("1.0","end")
         self.consolaSalida.insert(INSERT, consola)
+
+    # GENERA EL AST
+    def getDot(self, raiz): ## DEVUELVE EL STRING DE LA GRAFICA EN GRAPHVIZ
+        self.dot = ""
+        self.dot += "digraph {\n"
+        self.dot += "n0[label=\"" + raiz.getValor().replace("\"", "\\\"") + "\"];\n"
+        self.contador = 1
+        self.recorrerAST("n0", raiz)
+        self.dot += "}"
+        return self.dot
+
+    def recorrerAST(self, idPadre, nodoPadre):
+        for hijo in nodoPadre.getHijos():
+            nombreHijo = "n" + str(self.contador)
+            self.dot += nombreHijo + "[label=\"" + hijo.getValor().replace("\"", "\\\"") + "\"];\n"
+            self.dot += idPadre + "->" + nombreHijo + ";\n"
+            self.contador += 1
+            self.recorrerAST(nombreHijo, hijo)
 

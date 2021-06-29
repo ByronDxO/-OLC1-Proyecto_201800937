@@ -4,6 +4,7 @@
 from Interprete.Abstract.Instruccion import Instruccion
 from Interprete.TS.Tipo import Tipo
 from Interprete.TS.Exception import Exception
+from Interprete.Abstract.NodoAST import NodoAST
 
 class Imprimir(Instruccion):
     
@@ -22,3 +23,8 @@ class Imprimir(Instruccion):
             return Exception("Semantico", "No se puede imprimir un arreglo", self.fila, self.columna)
 
         tree.update_consola(value)
+
+    def getNodo(self):
+        nodo = NodoAST("IMPRIMIR")
+        nodo.agregarHijoNodo(self.expresion.getNodo())
+        return nodo

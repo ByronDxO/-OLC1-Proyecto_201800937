@@ -6,6 +6,7 @@ from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
 from Interprete.Instrucciones.Return import Return
 from Interprete.Instrucciones.Continue import Continue
+from Interprete.Abstract.NodoAST import NodoAST
 
 class While(Instruccion):
     def __init__(self, condicion, instrucciones, fila, columna):
@@ -35,3 +36,13 @@ class While(Instruccion):
                     break
             else:
                 return Exception("Semantico", "Tipo de dato no booleano en While.", self.fila, self.columna)
+
+    def getNodo(self):
+        nodo = NodoAST("WHILE")
+        nodo.agregarHijoNodo(self.condicion.getNodo())
+        instrucciones = NodoAST("INSTRUCCIONES")
+        for instr in self.instrucciones:
+            instrucciones.agregarHijoNodo(instr.getNodo())
+        nodo.agregarHijoNodo(instrucciones)
+        
+        return nodo

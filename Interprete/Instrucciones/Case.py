@@ -6,6 +6,7 @@ from Interprete.TS.Exception import Exception
 from Interprete.TS.Tipo import Tipo
 from Interprete.TS.TablaSimbolo import TablaSimbolo
 from Interprete.Instrucciones.Break import Break
+from Interprete.Abstract.NodoAST import NodoAST
 
 class Case(Instruccion):
     def __init__(self, condicion, instrucciones,  fila, columna):
@@ -19,6 +20,19 @@ class Case(Instruccion):
         if isinstance(result, Exception): return result
 
         return result
+
+
+    def getNodo(self):
+        nodo = NodoAST("CASE")
+
+        if self.instrucciones != None:
+            nodo.agregarHijoNodo(self.condicion.getNodo())
+            instruccionesDefault = NodoAST("INSTRUCCIONES CASE")
+            for instr in self.instrucciones:
+                instruccionesDefault.agregarHijoNodo(instr.getNodo())
+            nodo.agregarHijoNodo(instruccionesDefault)
+
+        return nodo
 
     def get_instrucciones_case(self):
         return self.instrucciones
