@@ -13,16 +13,18 @@ class Read(Instruccion):
         self.fila = fila
         self.columna = columna
         self.tipo = Tipo.CADENA
+        self.lectura = None
 
     def interpretar(self, tree, table):
         print(tree.get_consola()) #IMPRIME LA CONSOLA
         # print("Ingreso a un READ. Ingrese el valor\r")
         
         tree.showConsolaSalida(tree.get_consola())
-        lectura = simpledialog.askstring("Read()", "Ingrese el Valor:", parent=tree.getConsolaSalida())
+        self.lectura = simpledialog.askstring("Read()", "Ingrese el Valor:", parent=tree.getConsolaSalida())
         
-        return lectura
+        return self.lectura
 
     def getNodo(self):
         nodo = NodoAST("READ")
+        nodo.agregarHijo(str(self.lectura))
         return nodo

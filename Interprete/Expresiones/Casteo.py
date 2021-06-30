@@ -79,7 +79,13 @@ class Casteo(Instruccion):
         elif self.tipo == Tipo.BOOLEANO:
             if self.expresion.tipo == Tipo.CADENA:# Este es el tipo de la expresion(String).                   -> String a Boolean
                 try:
-                    return str(self.obtenerVal(self.expresion.tipo, val))
+
+                    if str(self.obtenerVal(self.expresion.tipo, val)).lower() == "true": 
+                        return True
+                    elif str(self.obtenerVal(self.expresion.tipo, val)).lower() == "false": 
+                        return False
+                    else: 
+                        return Exception("Semantico", "No se puede castear para String a Boolean.", self.fila, self.columna)
                 except:
                     return Exception("Semantico", "No se puede castear para String a Boolean.", self.fila, self.columna)
             return Exception("Semantico", "Tipo Erroneo de casteo para Boolean.", self.fila, self.columna)
