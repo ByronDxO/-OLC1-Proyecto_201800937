@@ -10,6 +10,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 import tkinter.font as tkFont
+import webbrowser as wb
 
 
 class Ventana():
@@ -46,7 +47,7 @@ class Ventana():
         # ------------------------------------ REPORTES ------------------------------------ 
         self.reporte = Menu(self.barra_menu, bg='#000000', foreground="#ffffff")
         self.reporte.add_command(label="Reporte de Errores")
-        self.reporte.add_command(label="Generar Árbol AST (Árbol de Análisis Sintáctico)")
+        self.reporte.add_command(label="Generar Árbol AST (Árbol de Análisis Sintáctico)", command=lambda:self.reporte_ast())
         self.reporte.add_command(label="Reporte de Tabla de Símbolos")
 
 
@@ -453,7 +454,21 @@ class Ventana():
     def reporte_error(self):
         pass
     def reporte_ast(self):
-        pass
+        try:
+            #root = Tk()
+            ruta =  ""
+            filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("TXT files","*.pdf"),("all files","*.*")))
+            ruta = filename
+            if ruta != "":
+                wb.open_new(ruta)
+                return ruta
+            else:
+
+                return None
+
+        except IndexError as e:
+            print(e)
+
     def reporte_tabla_simbolo(self):
         pass
 
