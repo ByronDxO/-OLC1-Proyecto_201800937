@@ -394,27 +394,33 @@ class Ventana():
 
         # Se revisa en la lista de reservadas
         for tokens_reservadas in global_lista:
-            if  (tokens_reservadas[1].lower() == "print")     or \
-                (tokens_reservadas[1].lower() == "var")       or \
-                (tokens_reservadas[1].lower() == "true")      or \
-                (tokens_reservadas[1].lower() == "false")     or \
-                (tokens_reservadas[1].lower() == "if")        or \
-                (tokens_reservadas[1].lower() == "else")      or \
-                (tokens_reservadas[1].lower() == "while")     or \
-                (tokens_reservadas[1].lower() == "break")     or \
-                (tokens_reservadas[1].lower() == "main")      or \
-                (tokens_reservadas[1].lower() == "func")      or \
-                (tokens_reservadas[1].lower() == "for")       or \
-                (tokens_reservadas[1].lower() == "switch")    or \
-                (tokens_reservadas[1].lower() == "case")      or \
-                (tokens_reservadas[1].lower() == "default")   or \
-                (tokens_reservadas[1].lower() == "int")       or \
-                (tokens_reservadas[1].lower() == "double")    or \
-                (tokens_reservadas[1].lower() == "string")    or \
-                (tokens_reservadas[1].lower() == "char")      or \
-                (tokens_reservadas[1].lower() == "boolean")   or \
-                (tokens_reservadas[1].lower() == "continue")  or \
-                (tokens_reservadas[1].lower() == "return")    or \
+            if  (tokens_reservadas[1].lower() == "print")      or \
+                (tokens_reservadas[1].lower() == "var")        or \
+                (tokens_reservadas[1].lower() == "true")       or \
+                (tokens_reservadas[1].lower() == "false")      or \
+                (tokens_reservadas[1].lower() == "if")         or \
+                (tokens_reservadas[1].lower() == "else")       or \
+                (tokens_reservadas[1].lower() == "while")      or \
+                (tokens_reservadas[1].lower() == "break")      or \
+                (tokens_reservadas[1].lower() == "main")       or \
+                (tokens_reservadas[1].lower() == "func")       or \
+                (tokens_reservadas[1].lower() == "for")        or \
+                (tokens_reservadas[1].lower() == "switch")     or \
+                (tokens_reservadas[1].lower() == "case")       or \
+                (tokens_reservadas[1].lower() == "default")    or \
+                (tokens_reservadas[1].lower() == "int")        or \
+                (tokens_reservadas[1].lower() == "double")     or \
+                (tokens_reservadas[1].lower() == "string")     or \
+                (tokens_reservadas[1].lower() == "char")       or \
+                (tokens_reservadas[1].lower() == "boolean")    or \
+                (tokens_reservadas[1].lower() == "continue")   or \
+                (tokens_reservadas[1].lower() == "return")     or \
+                (tokens_reservadas[1].lower() == "tolower")    or \
+                (tokens_reservadas[1].lower() == "toupper")    or \
+                (tokens_reservadas[1].lower() == "typeof")     or \
+                (tokens_reservadas[1].lower() == "length")     or \
+                (tokens_reservadas[1].lower() == "round")      or \
+                (tokens_reservadas[1].lower() == "truncate")   or \
                 (tokens_reservadas[1].lower() == "read"):
 
                 tokens_reservadas[0] = "tk_reseverda"
