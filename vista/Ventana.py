@@ -214,7 +214,7 @@ class Ventana():
             ruta = self.filename
             if ruta != "":
                 try:
-                    archivo = open(ruta, "r")
+                    archivo = open(ruta, "r", encoding='utf-8')
                     texto = archivo.read()
 
                     self.scroll.text.delete("1.0","end")
