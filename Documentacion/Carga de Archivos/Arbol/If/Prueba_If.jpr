@@ -1,0 +1,58 @@
+main(){
+    var prueba = 0;
+
+    print("----- IF SIMPLE -----");
+    if (prueba <= 20){
+        print("Caso igual a 20 o menor");
+    }
+
+    prueba = 25;
+    print("----- IF ELSE-IF -----");
+    if (prueba <= 20){
+        print("Caso igual a 20 o menor");
+    }else if( prueba >= 21){
+        print("Caso mayor o igual a 21");
+    }
+
+    prueba = 105;
+    print("----- IF LISTA ELSE-IF -----");
+    if (prueba <= 20){
+        print("Caso igual a 20 o menor");
+    }else if( prueba == 21){
+        print("Caso igual a 21");
+    }else if (prueba == 400){
+        print("Caso igual a 400");
+    }else if (prueba >= 100){
+        print("Caso mayor o igual a 100");
+    }
+    
+    prueba = 80;
+    print("----- IF CON ELSE -----");
+    if (prueba <= 20){
+        print("Caso igual a 20 o menor");
+    }else if( prueba == 21){
+        print("Caso igual a 21");
+    }else{
+        print("Caso del else");
+    }
+}    
+
+#*SSSSSSALIDA
+----- IF SIMPLE -----
+Caso igual a 20 o menor
+----- IF ELSE-IF -----
+Caso mayor o igual a 21
+----- IF LISTA ELSE-IF -----
+Caso mayor o igual a 100
+----- IF CON ELSE -----
+Caso del else
+*#    
+
+    
+
+    
+
+    
+
+    
+

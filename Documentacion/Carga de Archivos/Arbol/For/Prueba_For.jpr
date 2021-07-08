@@ -1,0 +1,38 @@
+main(){
+    print("FOR CON DECLARACION Y DECREMENTO");
+    for(var i=20; i>10; i--){
+        print(i);
+    }
+
+    print("FOR CON DECLARACION E INCREMENTO");
+    for(var k = 100; k<110; k++){
+        print(k);
+    }
+
+    print("FOR CON ASIGNACION Y DECREMENTO");
+    var j;
+    for(j = 210; j>200; j--){
+        print(j);
+    }
+
+    print("FOR CON ASIGNACION E INCREMENTO");
+    var l;
+    for(l = 300; l<310; l++){
+        print(l);
+    }
+    
+    var m;
+    print("FOR CON ASIGNACION Y DECREMENTO ASIGNADO");
+    for(m = 410; m>400; m = m - 1){
+        print(m);
+    }
+
+    
+    print("FOR CON DECLARACION E INCREMENTO ASIGNADO");
+    for(var n = 500; n<510; n = n + 1){
+        print(n);
+    }
+}    
+
+    
+

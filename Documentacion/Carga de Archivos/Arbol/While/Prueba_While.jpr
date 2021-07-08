@@ -1,0 +1,10 @@
+main(){
+    var ident = 150;
+    while(true){
+        if(ident == 200){
+            print(ident);
+            break;
+        }
+        ident ++;
+    }
+}

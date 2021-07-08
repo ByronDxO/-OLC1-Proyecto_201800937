@@ -1,0 +1,158 @@
+#*
+ARCHIVO PRUEBA
+Archvio de pruebas basicas de funciones y parametros
+*#
+
+func HolaMundoInt(int numeroEntero){
+    print("------------------------------------------");
+    print("Metodo INT")
+    print("HolaMundoInt: " + numeroEntero);
+    print(numeroEntero + 500);
+}
+
+func HolaMundoDouble(double numeroDoble){
+    print("------------------------------------------");
+    print("Metodo DOUBLE")
+    print("HolaMundoDouble: " + numeroDoble);
+    print(numeroDoble + 500);
+}
+
+main(){
+    var numeroEntero = 100;
+    holamundoInt(50 + True + numeroEntero); # 151
+    HolaMundoDoublE(100.5 + 5 * 2 / 2 + numeroEntero); # 205.5
+    HolamundOBool(True || False && True); # True
+    HolaMundoChar('e');
+    holamundostring(">Cadena< " + numeroEntero); # ">Cadena< 100"
+    multiplesParametros(numeroEntero, 50.5 + numeroEntero/2 , false, 'x', "cadenita" + "-Funciona");
+    # 100, 105.5, false, 'x', "cadenita-Funciona"
+    multiplesParametros(True, 50.5 + numeroEntero/2 , false, 'x', "cadenita" + "-Funciona"); # Error Tipo INT - BOOL
+    multiplesParametros(50.5 + numeroEntero/2 , false, 'x', "cadenita" + "-Funciona"); # Error num parametros
+    print(numeroEntero);
+    print(numeroDoble);     # error variable no encontrada
+    print(Suma(100, 500));
+    print(par(101))
+    print(impar(101))
+    print(factorial(5))
+    print(ackermann(3,4));
+    print(50 + "Cadena"+ True )
+
+}
+
+func HolaMundoBool(boolean bool){
+    print("------------------------------------------");
+    print("Metodo BOOLEAN")
+    print("HolaMundoBoolean: " + bool);
+    print(bool + 500);
+}
+
+func HolaMundoChar(char caracter){
+    print("------------------------------------------");
+    print("Metodo CHAR")
+    print("HolaMundoChar: " + caracter);
+}
+
+func HolaMundoString(string nombre){
+    print("------------------------------------------");
+    print("Metodo STRING")
+    print("HolaMundoNombre: " + nombre);
+}
+
+func multiplesParametros(int entero, double decimal, boolean booleano, char caracter, string cadena){
+    print("///////////////////////////////////////////");
+    print("------------------------------------------");
+    print("INT: " + entero);
+    print("------------------------------------------");
+    print("DOUBLE: " + decimal);
+    print("------------------------------------------");
+    print("BOOLEAN: " + booleano);
+    print("------------------------------------------");
+    print("CHAR: " + caracter);
+    print("------------------------------------------");
+    print("STRING: " + cadena);
+}
+
+# ------------------------------------ Pruebas con Retorno -------------------------------
+func Suma(int a, int b){
+    var suma = a + b
+    return suma + 600
+}
+
+func Suma5(int a, int b, int c, int d, int e){
+    return a +b+c+d+e
+}
+
+func factorial(int num){
+    if(num == 0){
+        return 1
+    }
+    else{
+        return num * factorial(num-1)
+    }
+}
+
+func par(int nump) {
+    if (nump == 0) {
+        return true;
+    }
+    return impar(nump - 1);
+}
+
+func impar(int numi) {
+    if (numi == 0) {
+        return false;
+    }
+    return par(numi - 1);
+}
+
+func ackermann(int m, int n){
+    if (m == 0){
+        return n + 1;
+    } else if (m > 0 && n == 0){
+        return ackermann(m-1, 1)
+    } else{
+        return ackermann(m-1, ackermann(m, n-1))
+    }
+}
+
+#* SALIDA ESPERADA:
+------------------------------------------
+Metodo INT
+HolaMundoInt: 151
+651
+------------------------------------------
+Metodo DOUBLE
+HolaMundoDouble: 205.5
+705.5
+------------------------------------------
+Metodo BOOLEAN
+HolaMundoBoolean: True
+501
+------------------------------------------
+Metodo CHAR
+HolaMundoChar: e
+------------------------------------------
+Metodo STRING
+HolaMundoNombre: >Cadena< 100
+///////////////////////////////////////////
+------------------------------------------
+INT: 100
+------------------------------------------
+DOUBLE: 100.5
+------------------------------------------
+BOOLEAN: False
+------------------------------------------
+CHAR: x
+------------------------------------------
+STRING: cadenita-Funciona
+Semantico - > Excepcion DISTINTOS TIPOS DE PARAMETROS: Funcion y Llamada. < [30,5]
+Semantico - > Excepcion DISTINTO NUMERO DE PARAMETROS: Funcion y Llamada. < [31,5]
+100
+Semantico - >Variable numeroDoble no encontrada.< [33,11]
+1200
+False
+True
+120
+125
+50CadenaTrue
+*#

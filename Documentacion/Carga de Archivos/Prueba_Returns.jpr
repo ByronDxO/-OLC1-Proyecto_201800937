@@ -1,0 +1,151 @@
+var variable_1 = 100;
+var variable_22 = 800;
+main(){
+    var variable_2 = 90;
+    # Archivo de pruebas para la funcion con parametros y return en while, if, switch-case, for
+
+    # Prueba para el IF y WHILE, con return
+    print("------------------------------------- IF - WHILE - RETURN -------------------------------------")
+    # El numero1 es el numero mayor -> 100
+    print("Salida1 IFWHILE: " + pruebaifwhile(variable_1, variable_2) + '\n');
+
+    # Imprime del 101 al 109 ; El numero2 fue el numero mayor -> 110 ; Error sintactico variable_2 no encontrada.
+    variable_2 = 110;
+    print("Salida2 IFWHILE: " + pruebaIFWHile(variable_1, variable_2) + '\n')
+
+    # El numero 1 y numero 2 son iguales -> 100
+    variable_2 = 100;
+    print("Salida3 IFWHILE: " + pruebaIfWhile(100, variable_2) + '\n')
+
+    # Imprime del 37 al 39 y El numero1 es igual a 40 -> 40
+    variable_2 = 41;
+    print("Salida4 IFWHILE: " + pruebaIfWhilE(37, variable_2) + '\n');
+    print("-----------------------------------------------------------------------------------------------")
+    # 102 , 41
+    print("Resultado de variables final: " + variable_1 + " , " + variable_2);
+
+    print("------------------------------------- SWITCH - FOR - RETURN -------------------------------------");
+    # El numero1 es mayor o igual a 59 -> 60
+    print("Salida1 SWITCHFOR ->" + pruebaForSwitch(60, 100, true) + '\n');
+
+    # Imprime del 40 al 44 ; Es falso -> false ; El numero es 45
+    print("Salida2 SWITCHFOR -> " + pruebaForSwitch(40, 100, true) + '\n');
+
+    # Imprime del 55 al 58 ; Es verdero ; El numero es 59
+    print("Salida3 SWITCHFOR -> " + pruebaForSwitch(55, 100, false) + '\n');
+
+    # El numero del for es : 15 ; La variable_22 es: 801;  13
+    print("Salida4 SWITCHFOR -> " + pruebaForSwitch(19, 100, true) + '\n');
+
+    # Salida4 SWITCHFOR -> 23
+    print("Salida5 SWITCHFOR -> " + pruebaForSwitch(23, 100, true) + '\n');
+}
+
+# ------------------------------------ Pruebas con Retorno -------------------------------
+
+func pruebaIfWhile(int numero1, int numero2){
+    # Si el numero 1 es mayor o igual al numero 2
+    if (numero1 > numero2){
+        variable_1++;
+        return "El numero1 es el numero mayor -> " + numero1;
+    }else if(numero1 == numero2){
+        return "El numero 1 y numero 2 son iguales -> " + numero1;
+    }
+
+    #* Si el numero 2 es mayor
+    al numero1 *#
+    while(numero2 > numero1){
+        if(numero1 == 40){
+            return "El numero1 es igual a 40 -> " + numero1;
+        }
+        print("Este es el numero : " + numero1);
+        numero1++;
+    }
+    variable_1 = variable_1 + 1;
+    variable_2++;                                           # ERROR
+    return "El numero2 fue el numero mayor -> " + numero2;
+}
+
+func pruebaForSwitch(int numero1, int numero2, boolean pregunta){
+
+    # numero1 tiene que ser menor a 60
+    if (numero1 >= 59){
+        return "El numero1 es mayor o igual a 59 -> " + numero1;
+    }else if (numero1 <= 20){
+        for(var i = 15; i>10; i--){
+            print("El numero del for es : " +i);
+            variable_22++;
+            print("La variable_22 es: " + variable_22);
+            i--;
+            i--;
+            return i;
+        }
+    }
+    for (var caso = numero1; caso < 60; caso++){
+        switch(caso){
+            case 45:
+                pregunta = false;
+                print("Es falso -> " + pregunta)
+                return "El numero es " + 45;
+            case 59:
+                pregunta = true;
+                print("Es verdadero -> " + pregunta)
+                return "El numero es " + 59;
+            default:
+                if (caso <= 25){
+                    return caso;
+                }
+                print("Pasamos una iteracion -> " + caso);
+        }
+    }
+}
+
+#* ESTA DEBERIA SER LA SALIDA:
+------------------------------------- IF - WHILE - RETURN -------------------------------------
+Salida1 IFWHILE: El numero1 es el numero mayor -> 100
+
+Este es el numero : 101
+Este es el numero : 102
+Este es el numero : 103
+Este es el numero : 104
+Este es el numero : 105
+Este es el numero : 106
+Este es el numero : 107
+Este es el numero : 108
+Este es el numero : 109
+Semantico - >Variable variable_2 no encontrada.< [65,5]
+Salida2 IFWHILE: El numero2 fue el numero mayor -> 110
+
+Salida3 IFWHILE: El numero 1 y numero 2 son iguales -> 100
+
+Este es el numero : 37
+Este es el numero : 38
+Este es el numero : 39
+Salida4 IFWHILE: El numero1 es igual a 40 -> 40
+
+-----------------------------------------------------------------------------------------------
+Resultado de variables final: 102 , 41
+------------------------------------- SWITCH - FOR - RETURN -------------------------------------
+Salida1 SWITCHFOR ->El numero1 es mayor o igual a 59 -> 60
+
+Pasamos una iteracion -> 40
+Pasamos una iteracion -> 41
+Pasamos una iteracion -> 42
+Pasamos una iteracion -> 43
+Pasamos una iteracion -> 44
+Es falso -> False
+Salida2 SWITCHFOR -> El numero es 45
+
+Pasamos una iteracion -> 55
+Pasamos una iteracion -> 56
+Pasamos una iteracion -> 57
+Pasamos una iteracion -> 58
+Es verdadero -> True
+Salida3 SWITCHFOR -> El numero es 59
+
+El numero del for es : 15
+La variable_22 es: 801
+Salida4 SWITCHFOR -> 13
+
+Salida5 SWITCHFOR -> 23
+*#

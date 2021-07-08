@@ -1,0 +1,376 @@
+var var1 = 1;
+var punteo = 0;
+
+
+main () {
+
+    print("-----------------CALIFICACION ARCHIVO 1-----------------");
+    print("Valor: 15 pts");
+    print("--------------------------------------------------------");
+    var var1 = 0;
+    #Verificar ambitos, se toma con prioridad la variable local ante la global.
+    if (var1 =! 0) {
+        print("No se toma con prioridad la variable local ante la global");
+        print("Perdiste 8 puntos :c");
+    }
+    else {
+        punteo = punteo + 8;
+        print("Muy bien, prioridad de variable local correcta");
+        print("Haz sumado 8 puntos");
+        print("Punteo = " + punteo);
+    }
+
+#-----------------------------------------------Sección de declaracion de variables-------------------------------------------
+	#el if es para simular un nuevo ambito 
+    if(1==1){
+        print("========= Metodo Declaracion =========");
+        var n1 = 1;
+        var n2 = 1;
+        var n3 = 1;
+        var n4 = 1;
+        var str1 = "Voy a ganar Compiladores";
+        var str2 = "Voy a ganar Compiladores";
+        var str3 = "Voy a ganar Compiladores";
+        var str4 = "Voy a ganar Compiladores";
+        var db1 = 0.0;
+        var db2 = 0.0;
+        var db3 = 0.0;
+        var db4 = 0.0;
+        var chr1 = 's';
+        var chr2 = 's';
+        var chr3 = 's';
+        var chr4 = 's';
+        #si n modificar la asignaci?n
+        if (db1 == db4) {
+            print(str1 + chr2 + " " + n3 + " :D");
+            punteo = punteo + 6;
+            print("Declaración correcta");
+            print("Haz sumado 6 puntos");
+        } else {
+            print("Problemas en el metodo declaracion :(");
+            print("Perdiste 6 pts :(");
+        }
+        print("--------------------------------------");
+        print("Punteo = " + punteo);
+        print("======================================");
+    }
+    
+#---------------------------------------------------------seccion de manejo de Ambitos 2-------------------------------------------------------
+    
+	var amb1 = 3;
+	if(amb1 == 3){
+		
+		var amb1 = "Desde ambito2";
+		print("==============Ambitos 2===============");
+		if (amb1 == "Desde ambito2") {
+			print(amb1);
+			punteo = punteo + 8;
+		}
+		else {
+			print("Tienes un error al manejar la variable amb1 :(");
+			print("Perdiste 8 puntos");
+		}
+		print("Punteo = " + punteo);
+		print("======================================");
+
+	}
+
+#----------------------------------------------------------Sección de expresiones aritméticas------------------------------------------------------------
+	#para simular un nuevo ambito
+    if(1==1){
+        #suma de strings con caracteres
+        print("==============Aritmeticas=============");
+        var art1 = "Hola " + 'C' + "" + 'O' + "" + 'M' + "" + 'P' + "" + 'I';
+        print(art1);
+        if (art1 == "Hola COMPI") {
+            punteo = punteo + 6;
+        } else {
+            print("Perdiste 6 puntos en suma de cadena y caracter :c");
+        }
+
+        var n1 = 0.0 + true + true + 1 + 0.1 + 49;
+        print("El valor de  n1 = " + n1);
+        if (n1 == 52.1) {
+            punteo = punteo + 6;
+        } else {
+            print("Perdiste 6 puntos en suma de enteros booleanos :c");
+        }
+
+        var n2 = 50 - 1 - 49;
+        if (n2 == 0) {
+            punteo = punteo + 5;
+        } else {
+            print("Perdiste 5 puntos en la resta :c");
+        }
+
+        var n4 = (5750 * 2) - 11800 + 1.0;
+        var n3 = (((3 * 3) + 4) - 80 + 40.00 * 2 + 358.50 - (29 / 14.50)) - (0.50) + n4;
+        print("El valor de n3 = " + n3);
+        if (n3 == 70.0) {
+            punteo = punteo + 6;
+        }
+        else {
+            print("Perdiste 6 puntos :c ");
+        }
+
+        if(2==2){
+            #para simular un nuevo entorno
+
+            #-----------------------------------------Operaciones Basicas------------------------------------------
+
+            print("Operaciones Aritmeticas 1: valor esperado:   a)62   b)0   c)-19   d)256   resultados>");
+            var a;
+            a = (20 - 10 + 8 / 2 * 3 + 10 - 10 - 10 + 50);
+            var b;
+            b = (50 / 50 * 50 + 50 - 100 + 100 - 100);
+            var c;
+            c = (100 / 20 * 9 - 78 + 6 - 7 + 8 - 7 + 7 * 1 * 2 * 3 / 3);
+            var d;
+            d = (2 ** (20 / 5 * 2));
+            print("a) " + a);
+            print("b) " + b);
+            print("c) " + c);
+            print("d) " + d);
+            if (a == 62 && b == 0 && c == -19 && d == 256) {
+                print("Operaciones aritmeticas 1 bien :D");
+                punteo = punteo + 8;
+            } else {
+                print("Error para las operaciones basicas :(");
+            }
+    
+        }
+
+        if(3==3){
+            #-----------------------------------operacionesAvanzadas-------------------------------------
+	
+            var aritmetica1 = 2.0;
+            var aritmetica2 = -10;
+            print("Operaciones Aritmeticas 2: valor esperado>-20  41 \nresultado>");
+            var aritmetica3 = aritmetica2 * aritmetica1;
+            print(aritmetica3 + "");
+            aritmetica1 = aritmetica3 / aritmetica1 + 50 ** 2 / 50 + 50 * 2 - 100 + 100 / 100 - 0;
+            print(aritmetica1 + "");
+            if (aritmetica3 == -20 && aritmetica1 == 41) {
+                print("Operaciones aritmeticas 2 bien :D");
+                punteo = punteo + 8;
+            } else {
+                print("Error Operaciones Aritmeticas");
+            }
+            
+            print("Punteo = " + punteo);
+            print("======================================");
+
+            #* SALIDA ESPERADA
+                ==============Aritmeticas=============
+                Hola COMPI
+                El valor de  n1 = 52.1
+                El valor de n3 = 70.0
+                -Operaciones Basicas: valor esperado:   a)62   b)0   c)-19   d)256   resultados>
+                a) 62
+                b) 0
+                c) -19
+                d) 256
+                ======================================
+            *#
+        }
+
+        print("Punteo = " + punteo);
+        print("======================================");
+    }
+
+
+#---------------------------------------------------Seccion de expresiones lógicas----------------------------------------------------
+    if(4==4){
+        print("==============Logicas1=============");
+        if (!!!!!!!!!!!!!!!!!!true) {
+            punteo = punteo + 1;
+            print("Bien primera condicion:)");
+        } else {
+            print("Perdiste 1 punto :c");
+        }
+
+        if (((true && true) || ((false && false) && (false == true))) || (!true)) {
+            punteo = punteo + 5;
+            print("Bien segunda condicion:)");
+        } else {
+            print("Perdiste 5 puntos :c");
+        }
+        print("======================================");
+
+        if(5==5){
+            var n0 = 16;
+            print("==============Logicas2=============");
+
+            if (!(!(n0 == 16 && false == true) && !(true))) {
+                print("Not y Ands Correctos");
+                punteo = punteo + 5;
+
+            } else {
+                print("No funcionan nots y ands :(");
+            }
+    
+            var n1;
+            n1 = n0 / 16;
+            n1 = n1 + true;
+            var condicion1 = n1 =! 2; #esto es falso
+            var aritmetica1 = n0 / 16 + ((!(true || false))); # aritmetica1 = 0
+            var condicion2 = aritmetica1 == n1; #falso
+            var condicion3 = !true; #falso
+
+            if (!(!(!(condicion1 || condicion2) || condicion3))) {
+                print("Nots y Ors correctos");
+                punteo = punteo + 5;
+            } else {
+                print("No Funciona nots y ands :(");
+            }
+            print("======================================");
+
+            if(6==6){
+
+                #Hacer lo mismo que logicas2 pero con nands y nors
+                print("==============Logicas3=============");
+
+                if (!(!(n0 == 16 && false == true) && !(true))) {
+                    print("NANDS Correctos");
+                    punteo = punteo + 5;
+
+                } else {
+                    print("No funcionan NANDS :(");
+                }
+
+                var n1;
+                n1 = n0 / 16;
+                n1 = n1 + true;
+                var condicion1 = false; #esto es falso
+                var aritmetica1;
+                aritmetica1 = n0 / 16 + ((!(true || false))); # aritmetica1 = 0
+                var condicion2 = false; #falso
+                var condicion3 = true; #verdadero
+
+                if (!(!(!(condicion1 || condicion2) || condicion3))) {
+                    print("NORS correectos");
+                    punteo = punteo + 3;
+                } else {
+                    print("No Funcionan NORS :(");
+                }
+
+                print("======================================");
+            }
+
+        }
+    }
+        
+    print("--------------------------------------");
+    print("Punteo = " + punteo);
+    print("--------------------------------------");
+        
+
+        
+        
+#---------------------------------------------Seccion de expresiones relacionales-----------------------------------------------------
+	var n0 = 34;
+    var n1 = 16;
+	if (n0 == 34){
+	
+		var salida = 34;
+		
+		print("==============relacionales1=============");
+		var n0 = salida + 0.0;
+		if (n0 < 34.44) {
+			salida = salida + 15;
+			if (salida > 44) {
+				#salida++;
+                salida = salida + 1;
+			}
+		}
+		else {
+			salida = 1;
+		}
+
+		if (salida =! 1) {
+			if (salida == 50) {
+				print("Salida Correcta Relacionales 1!");
+				punteo = punteo + 10;
+			}
+			else {
+				print("Salida incorrecta!!");
+			}
+		}
+		else {
+			print("Salida incorrecta!!");
+		}
+		print("======================================");
+	}
+	
+	if (n1 == 16){
+        
+        var n0 = 16;
+        
+		print("vas bien, animo :D");
+
+		print("============Relacionales2=============");
+
+
+		if(10 - 15 >= 0 && 44.44 == 44.44)
+		{
+
+			print("Salida incorrecta primer Si relacionales2!!");
+
+		}
+
+		else {
+
+			if(15 + 8 == 22 - 10 + 5 * 3 - 4 && 13 * 0 > -1)
+
+			{
+
+				if(10.0 =! 11.0 - 1.01)
+
+				{
+
+					print("Salida CORRECTA en relacionales2!!");
+					punteo = punteo + 5;
+				}
+
+				else {
+
+					print("Salida incorrecta segundo Si relacionales 2!!");
+
+				}
+
+
+
+			}
+
+			else {
+
+				if(1 == 1)
+
+				{
+
+					print("Salida incorrecta relacionales 2 3er si !!");
+
+				}
+
+				else {
+
+					print("Salida incorrecta relacionales 2 Sino3er si !!");
+
+				}
+
+
+
+			}
+		}
+		print("======================================");
+	}
+	#punteo final
+	print("Punteo Final: " + punteo);
+	var resultado = (punteo*15)/100;
+	print("-----------------------------------");
+	print("|   RESULTADO ARCHIVO 1 = " + resultado +" pts  |");
+	print("-----------------------------------");
+
+}
+
+

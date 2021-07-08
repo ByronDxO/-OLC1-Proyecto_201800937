@@ -1,0 +1,648 @@
+# Archivo de prueba
+
+# Comentario de una sola línea
+
+#*
+  De esta manera se
+  representan los
+  comentarios multilínea
+*#
+
+# Declaración y asignación de variables globales
+var global_a;             # Declara una variable con valor nulo
+var global_b              # Declara una variable con valor nulo
+var global_int = 25;      # Declara una variable de tipo entero
+var global_dou = 25.0;    # Declara una variable de tipo double
+var global_boo = true     # Declara una variable de tipo boolean
+var global_cha = 'g'      # Declara una variable de tipo char
+var global_cad = "cadena" # Declara una variable de tipo string
+var GlObAl_A;             # Error: La variable ya está definida
+var global_salto = "Cadena con\nsalto de línea";
+var global_barra = "Cadena con \\ barra invertida";
+var global_comilla_doble = "Cadena con comilla doble";
+var global_tab = "Cadena con \t tabulación";
+var global_comilla_simple = "Cadena con \'comilla simple\'";
+var var1 = 1;
+
+# Declaraciones de funciones
+
+
+#Iniciando la ejecución del programa a partir de aquí
+main(){
+  var var1 = 0
+  if (var1 =! 0) {
+    print("No se toma con prioridad la variable local ante la global");
+  }
+  else {
+    print("Prioridad de variable local correcta.");
+  }
+
+  var n1 = 1;
+  var n2 = 1;
+  var n3 = 1;
+  var n4 = 1;
+  var str1 = "Voy a ganar Compiladores";
+  var str2 = "Voy a ganar Compiladores";
+  var str3 = "Voy a ganar Compiladores";
+  var str4 = "Voy a ganar Compiladores";
+  var db1 = 0.0;
+  var db2 = 0.0;
+  var db3 = 0.0;
+  var db4 = 0.0;
+  var chr1 = 's';
+  var chr2 = 's';
+  var chr3 = 's';
+  var chr4 = 's';
+
+  if (db1 == db4) {
+    print(str1 + chr2 + " " + n3 + " :D")
+    print("Declaración correcta");
+  } else {
+    print("Problemas en el metodo declaracion :(");
+  }
+
+  # Prueba de caracteres especiales
+  print("---------- CARACTERES ESPECIALES ----------");
+  print("-> Salto de línea:");
+  print(global_salto);
+  print("-------------------------------------------");
+  print("-> Barra invertida:");
+  print(global_barra);
+  print("-------------------------------------------");
+  print("-> Comilla doble:");
+  print(global_comilla_doble);
+  print("-------------------------------------------");
+  print("-> Tabulación:");
+  print(global_tab);
+  print("-------------------------------------------");
+  print("-> Comilla simple:");
+  print(global_comilla_simple);
+  print("-------------------------------------------");
+  
+  # Sumas de prueba
+  print("---------- SUMAS DE PRUEBA ----------");
+  var suma_1 = global_int + 5;
+  print("suma = " + suma_1) # Suma de enteros "suma = 30"
+  var suma_2 = global_dou + 5.0;
+  print("suma = " + suma_2) # Suma de doubles "suma = 30.0"
+  var suma_3 = global_boo + 0;
+  print("suma = " + suma_3) # Suma de booleanos "suma = 1"
+  var suma_4 = global_cha + 'b';
+  print("suma = " + suma_4) # Suma de chars "suma = gb"
+  var suma_5 = global_cad + "_extra";
+  print("suma = " + suma_5) # Suma de cadenas "suma = cadena_extra"
+
+  var n157 = 0.0 + true + true + 1 + 0.1 ;
+  print("El valor de  n1 = " + n1);
+  if (n157 == 3.1) {
+      print("Sumas Correctas")
+  } else {
+      print("Error de sumas entre booleanos y numericos");
+  }
+
+  # Resta de prueba
+  print("---------- RESTAS DE PRUEBA ----------");
+  var resta_1 = global_int - 5;
+  print("resta = " + resta_1); # Resta de enteros "resta = 20"
+  var resta_2 = global_dou - 5;
+  print("resta = " + resta_2); # Resta de doubles "resta = 20.0"
+  var resta_3 = global_boo - 1;
+  print("resta = " + resta_3); # Resta de booleano y entero "resta = 0"
+  var resta_4 = global_boo - 1.0;
+  print("resta = " + resta_4); # Resta de booleano y double "resta = 0.0"
+
+  # Multiplicaciones de prueba
+  print("---------- MULTIPLICACIONES DE PRUEBA ----------");
+  var mult_1 = global_int * 2;
+  print("multiplicación = " + mult_1); # Multiplicación de enteros "multiplicación = 50"
+  var mult_2 = global_dou * 2.0;
+  print("multiplicación = " + mult_2); # Multiplicación de doubles "multiplicación = 50.0"
+  var mult_3 = global_int * global_dou;
+  print("multiplicación = " + mult_3); # Multiplicación de entero y double "multiplicación = 625.0"
+
+  # Divisiones de prueba
+  print("---------- DIVISIONES DE PRUEBA ----------");
+  var div_1 = global_int / global_int;
+  print("división = " + div_1); # División entre enteros "división = 1.0"
+  var div_2 = global_dou / global_dou;
+  print("división = " + div_2); # División entre doubles "división = 1.0"
+  var div_3 = global_int / global_dou;
+  print("división = " + div_3); # División entre entero y double "división = 1.0"
+
+  # Módulos de prueba
+  print("---------- MODULOS DE PRUEBA ----------");
+  var mod_1 = global_int % 4;
+  print("módulo = " + mod_1); # Módulo entre enteros "módulo = 1.0"
+  var mod_2 = global_dou % 4.0;
+  print("módulo = " + mod_2); # Módulo entre doubles "módulo = 1.0"
+  var mod_3 = global_dou % 4;
+  print("módulo = " + mod_3); # Módulo entre double y entero "módulo = 1.0"
+
+  # Negaciones unarias de prueba
+  print("---------- NEGACIONES UNARIAS DE PRUEBA ----------");
+  var neg_1 = -global_int;
+  print("negación = " + neg_1); # Negación unaria de entero "negación = -25"
+  var neg_2 = - global_dou;
+  print("negación = " + neg_2); # Negación unaria de double "negación = -25.0"
+
+  var n400 = (5750 * 2) - 11800 + 1.0;
+  var n300 = (((3 * 3) + 4) - 80 + 40.00 * 2 + 358.50 - (29 / 14.50)) - (0.50) + n400;
+  print("El valor de n300 = " + n300);
+  if (n300 == 70.0) {
+    print("OPERACION ARITMETICA CORRECTA");
+  }
+  else {
+    print("OPERACION ARITMETICA INCORRECTA");
+  }
+
+  print("Operaciones Aritmeticas 1: valor esperado:   \n\ta)62   \n\tb)0   \n\tc)-19   \n\td)16   \nresultados>");
+  var a;
+  a = (20 - 10 + 8 / 2 * 3 + 10 - 10 - 10 + 50);
+  var b;
+  b = (50 / 50 * 50 + 50 - 100 + 100 - 100);
+  var c;
+  c = (100 / 20 * 9 - 78 + 6 - 7 + 8 - 7 + 7 * 1 * 2 * 3 / 3);
+  var d;
+  d = (2 * (20 / 5 * 2));
+  print("a) " + a);
+  print("b) " + b);
+  print("c) " + c);
+  print("d) " + d);
+  if (a == 62 && b == 0 && c == -19 && d == 16) {
+    print("Operaciones aritmeticas 1 bien :D");
+  } else {
+    print("Error para las operaciones basicas :(");
+  }
+
+  var aritmetica1 = 2.0;
+  var aritmetica2 = -10;
+  print("Operaciones Aritmeticas: \nvalor esperado>\n-20  \n-7 \nresultado>");
+  var aritmetica3 = aritmetica2 * aritmetica1;
+  print(aritmetica3);
+  aritmetica1 = aritmetica3 / aritmetica1 + 50 * 2 / 50 + 50 * 2 - 100 + 100 / 100 - 0;
+  print(aritmetica1);
+  if (aritmetica3 == -20 && aritmetica1 == -7) {
+    print("Operaciones aritmeticas 2 bien :D");
+  } else {
+    print("Error Operaciones Aritmeticas");
+  }
+
+  # Operaciones relacionales de prueba
+  print("---------- IGUALACIONES DE PRUEBA ----------");
+  var igu_1 = global_int == 25;
+  print("igualación = " + igu_1); # Igualación de enteros "igualación = true"
+  var igu_2 = global_dou == 20;
+  print("igualación = " + igu_2); # Igualación de doubles "igualación = false"
+  var igu_3 = global_boo == true;
+  print("igualación = " + igu_3); # Igualación de booleanos "igualación = true"
+  var igu_4 = global_cha == 'c';
+  print("igualación = " + igu_4); # Igualación de chars "igualación = false"
+  var igu_5 = global_cad == "cadena";
+  print("igualación = " + igu_5); # Igualación de chars "igualación = true"
+
+  print("---------- DIFERENCIACIACIONES DE PRUEBA ----------");
+  var dif_1 = global_int =! 25;
+  print("diferenciación = " + dif_1); # Diferenciación de enteros "diferenciación = false"
+  var dif_2 = global_dou =! 20;
+  print("diferenciación = " + dif_2); # Diferenciación de doubles "diferenciación = true"
+  var dif_3 = global_boo =! true;
+  print("diferenciación = " + dif_3); # Diferenciación de booleanos "diferenciación = false"
+  var dif_4 = global_cha =! 'c';
+  print("diferenciación = " + dif_4); # Diferenciación de chars "diferenciación = 1"
+  var dif_5 = global_cad =! "cadena";
+  print("diferenciación = " + dif_5); # Diferenciación de chars "diferenciación = false"
+
+  print("---------- COMPARACIONES MENOR QUE DE PRUEBA ----------");
+  var meq_1 = global_int < 25;
+  print("menor que = " + meq_1); # Menor que de enteros "menor que = true"
+  var meq_2 = global_dou < 20;
+  print("menor que = " + meq_2); # Menor que de doubles "menor que = false"
+  var meq_3 = global_boo < true;
+  print("menor que = " + meq_3); # Menor que de booleanos "menor que = true"
+
+  print("---------- COMPARACIONES MENOR O IGUAL QUE DE PRUEBA ----------");
+  var mei_1 = global_int <= 25;
+  print("menor o igual que = " + mei_1); # Menor o igual que de enteros "menor o igual que = true"
+  var mei_2 = global_dou <= 20;
+  print("menor o igual que = " + mei_2); # Menor o igual que de doubles "menor o igual que = false"
+  var mei_3 = global_boo <= true;
+  print("menor o igual que = " + mei_3); # Menor o igual que de booleanos "menor o igual que = true"
+
+  print("---------- COMPARACIONES MAYOR QUE DE PRUEBA ----------");
+  var maq_1 = global_int > 25;
+  print("mayor que = " + maq_1); # Mayor que de enteros "mayor que = false"
+  var maq_2 = global_dou > 20;
+  print("mayor que = " + maq_2); # Mayor que de doubles "mayor que = true"
+  var maq_3 = global_boo > true;
+  print("mayor que = " + maq_3); # Mayor que de booleanos "mayor que = false"
+
+  print("---------- COMPARACIONES MAYOR O IGUAL QUE DE PRUEBA ----------");
+  var mai_1 = global_int >= 25;
+  print("mayor o igual que = " + mai_1); # Mayor o igual que de enteros "mayor o igual que = true"
+  var mai_2 = global_dou >= 20;
+  print("mayor o igual que = " + mai_2); # Mayor o igual que de doubles "mayor o igual que = true"
+  var mai_3 = global_boo >= true;
+  print("mayor o igual que = " + mai_3); # Mayor o igual que de booleanos "mayor o igual que = true"
+
+  # Operaciones lógicas de prueba
+  print("---------- OPERACIONES LÓGICAS DE PRUEBA ----------");
+  var or_1 = false || false;
+  print("or = " + or_1); # Or con resultado falso "or = false"
+  var or_2 = false || true;
+  print("or = " + or_2); # Or con resultado verdadero "or = true"
+  var or_3 = true || false;
+  print("or = " + or_3); # Or con resultado verdadero "or = true"
+  var or_4 = true || true;
+  print("or = " + or_4); # Or con resultado verdadero "or = true"
+
+  var and_1 = false && false;
+  print("and = " + and_1); # And con resultado falso "and = false"
+  var and_2 = false && true;
+  print("and = " + and_2); # And con resultado verdadero "and = false"
+  var and_3 = true && false;
+  print("and = " + and_3); # And con resultado verdadero "and = false"
+  var and_4 = true && true;
+  print("and = " + and_4); # And con resultado verdadero "and = true"
+
+  var not_a = true;
+  var not_b = false;
+  var not_1 = !not_a;
+  print("not = " + not_1); # Not con resultado falso "not = false"
+  var not_2 = !not_b;
+  print("not = " + not_2); # Not con resultado verdadero "not = true"
+
+  if (!!!!!!!!!!!!!!!!!!true) {
+    print("Bien primera not :)");
+  } else {
+    print("F condicion not");
+  }
+
+  if (((true && true) || ((false && false) && (false == true))) || (!true)) {
+    print("Bien condicion:)");
+  } else {
+    print("Mal condicion D:");
+  }
+
+  var n0 = 16;
+
+  if (!(!(n0 == 16 && false == true) && !(true))) {
+    print("Not y Ands Correctos");
+
+  } else {
+    print("No funcionan nots y ands :(");
+  }
+
+  var n111;
+  n111 = n0 / 16;
+  n111 = n111 + true;
+  var condicion1 = n111 =! 2; #esto es falso
+  var aritmetica12 = n0 / 16 + ((!(true || false))); # aritmetica12 = 0
+  var condicion2 = aritmetica12 == n111; #falso
+  var condicion3 = !true; #falso
+
+  if (!(!(!(condicion1 || condicion2) || condicion3))) {
+    print("Nots y Ors correctos");
+  } else {
+    print("No Funciona nots y ors :(");
+  }
+
+  n0 = 34
+
+  var n007 = n0 + 0.0;
+  if (n007 < 34.44) {
+    n007 = n007 + 15;
+    if (n007 > 44) {
+      n007++;
+
+    }
+  }
+  else {
+    n007 = 1;
+  }
+
+  if (n007 =! 1) {
+    if (n007 == 50) {
+      print("Salida Correcta Relacionales 1!");
+    }
+    else {
+      print("Salida incorrecta!!");
+    }
+  }
+  else {
+    print("Salida incorrecta!!");
+  }
+
+  if(10 - 15 >= 0 && 44.44 == 44.44)
+  {
+    print("Salida incorrecta primer Si relacionales2!!");
+
+  }
+  else {
+    if(15 + 8 == 22 - 10 + 5 * 3 - 4 && 13 * 0 > -1)
+    {
+      if(10.0 =! 11.0 - 1.01)
+      {
+
+        print("Salida CORRECTA en relacionales2!!");
+      }
+      else {
+        print("Salida incorrecta segundo Si relacionales 2!!");
+      }
+    }
+    else {
+
+      if(1 == 1)
+      {
+        print("Salida incorrecta relacionales 2 3er si !!");
+      }
+      else {
+        print("Salida incorrecta relacionales 2 Sino3er si !!");
+      }
+    }
+  }
+
+  # Signos de agrupación de prueba
+  print("---------- AGRUPACIÓN DE PRUEBA ----------");
+  var agr_1 = (1 + 2 + (1 - 2 / 2)) * 3;
+  print("agrupación = " + agr_1); # Resultado de la agrupación "agrupación = 9"
+
+  # Prueba de incremento de variables
+  print("---------- PRUEBA DE INCREMENTO DE VARIABLES ----------");
+  var inc_1 = 10;
+  inc_1++;
+  print("variable incrementada = " + inc_1); # "variable incrementada = 11"
+  var inc_2 = 10.7;
+  inc_2++;
+  print("variable incrementada = " + inc_2); # "variable incrementada = 11.7"
+
+  # Prueba de decremento de variables
+  print("---------- PRUEBA DE DECREMENTO DE VARIABLES ----------");
+  var dec_1 = 10;
+  dec_1--;
+  print("variable decrementada = " + dec_1); # "variable decrementada = 9"
+  var dec_2 = 10.7;
+  dec_2--;
+  print("variable decrementada = " + dec_2); # "variable decrementada = 9.7"
+
+  # Sentencias de control
+  print("---------- SENTENCIA IF ----------");
+  var if_1 = 25;
+  if(if_1 < 50)
+  {
+    print("if_1 es menor que 50");
+  }
+  if(if_1 > 50)
+  {
+    print("esto no debería de estar aquí");
+  }
+    # Salida de esta sección
+    # if_1 es menor que 50
+
+  print("---------- SENTENCIA ELSE ----------");
+  if(if_1 > 50)
+  {
+    print("esto no debería de estar aquí");
+  }
+  else
+  {
+    print("if_1 no es mayor a 50");
+  }
+    # Salida de esta sección
+    # if_1 no es mayor a 50
+
+  print("---------- SENTENCIA ELSE-IF ----------");
+  if(if_1 > 50)
+  {
+    print("esto no debería de estar aquí");
+  }
+  else if (if_1 <= 50 && if_1 >= 0)
+  {
+    print("if_1 se encuentra entre 0 y 50");
+    if (if_1 > 10)
+    {
+      print("if_1 es mayor a 10");
+    }
+    else
+    {
+      print("esto no debería de estar aquí");
+    }
+  }
+  else
+  {
+    print("esto no debería de estar aquí");
+  }
+    # Salida de esta sección
+    # if_1 se encuentra entre 0 y 50
+    # if_1 es mayor a 10
+
+  print("---------- SENTENCIA SWITCH ----------");
+  var swi_1 = 25;
+  switch(swi_1){
+    case 10:
+      print("esto no debería de estar aquí");
+    case 15:
+      print("esto no debería de estar aquí");
+    case 25:
+      print("switch case funcionando correctamente");
+    default:
+      print("acción por defecto");
+  }
+    # Salida de esta sección
+    # switch case funcionando correctamente
+    # acción por defecto
+
+  # Sentencias cíclicas
+  print("---------- SENTENCIA WHILE ----------");
+  var whi_1 = 1;
+  while(whi_1 <= 5)
+  {
+    print("ejecución número: " + whi_1);
+    whi_1++;
+  }
+    # Salida de esta sección
+    # ejecución número: 1
+    # ejecución número: 2
+    # ejecución número: 3
+    # ejecución número: 4
+
+  print("---------- SENTENCIA WHILE ANIDADA ----------");
+  var whi_2 = 1;
+  while(whi_2 <= 3)
+  {
+    print("ejecución número: " + whi_2);
+    var whi_2_anidado = 1;
+    while(whi_2_anidado <= 3)
+    {
+      print("ejecución anidada número: " + whi_2_anidado);
+      whi_2_anidado++;
+    }
+    whi_2++;
+  }
+    # Salida de esta sección
+    # ejecución número: 1
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+    # ejecución número: 2
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+    # ejecución número: 3
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+
+  print("---------- SENTENCIA FOR ----------");
+  for(var i = 1; i <= 3; i++)
+  {
+    print("ejecución número: " + i);
+  }
+    # Salida de esta sección
+    # ejecución número: 1
+    # ejecución número: 2
+    # ejecución número: 3
+
+  print("---------- SENTENCIA FOR ANIDADA ----------");
+  for(var i = 1; i <= 3; i++)
+  {
+    print("ejecución número: " + i);
+    for(var j = 1; j <= 3; j++)
+    {
+      print("ejecución anidada: " + j);
+    }
+  }
+    # Salida de esta sección
+    # ejecución número: 1
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+    # ejecución número: 2
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+    # ejecución número: 3
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+
+  print("---------- SENTENCIA FOR DENTRO DE WHILE ----------");
+  var whi_3 = 1;
+  while(whi_3 <= 3)
+  {
+    print("ejecución número: " + whi_3);
+    for(var i = 1; i <= 3; i++)
+    {
+      print("ejecución anidada número: " + i);
+    }
+    whi_3++;
+  }
+    # Salida de esta sección
+    # ejecución número: 1
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+    # ejecución número: 2
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+    # ejecución número: 3
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+
+  print("---------- SENTENCIA WHILE DENTRO DE FOR ----------");
+  for(var i = 1; i <= 3; i++)
+  {
+    print("ejecución número: " + i);
+    var whi_4 = 1;
+    while(whi_4 <= 3)
+    {
+      print("ejecución anidada número: " + whi_4);
+      whi_4++;
+    }
+  }
+    # Salida de esta sección
+    # ejecución número: 1
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+    # ejecución número: 2
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+    # ejecución número: 3
+    # ejecución anidada número: 1
+    # ejecución anidada número: 2
+    # ejecución anidada número: 3
+
+  print("----------------CICLO WHILE Y FOR---------------");
+
+  var numeroFactorial = 6;
+  while (numeroFactorial > -1) {
+      var fact = 1;
+      var cadena1 = "El factorial de: " + numeroFactorial + " = ";
+      if (numeroFactorial =! 0) {
+        for (var i = numeroFactorial; i > 0; i--) {
+          fact = fact * i;
+          cadena1 = cadena1 + i;
+          if (i > 1) {
+            cadena1 = cadena1 + " * ";
+          } else {
+            cadena1 = cadena1 + " = ";
+          }
+        }
+      }
+      cadena1 = cadena1 + fact;
+      print(cadena1);
+      numeroFactorial--;
+  }
+
+  print("-----------------WHILE ANIDADO------------------");
+  var iii = 0;
+  var nump = 8;
+  while (iii < nump) {
+      var j = 0;
+      var numeroMostrar = 1;
+      var unaFila = "";
+      while (j <= iii) {
+          unaFila = unaFila + " " + numeroMostrar;
+          numeroMostrar = numeroMostrar + 1;
+          j = j + 1;
+      }
+      print(unaFila);
+      iii = iii + 1;
+  }
+  print("Si la figura es un triangulo de numeros :3");
+  print("------------------------------------------------");
+
+
+  var cadenaFigura = "";
+  var figuraUNO = 10
+  var ip;
+  for (ip = -3 * figuraUNO / 2; ip <= figuraUNO; ip++) {
+    cadenaFigura = "";
+    var j;
+    for (j = -3 * figuraUNO / 2; j <= 3 * figuraUNO / 2; j++) {
+      var absolutoi;
+      absolutoi = ip;
+      var absolutoj;
+      absolutoj = j;
+      if (ip < 0) {
+        absolutoi = ip * -1;
+      }
+      if (j < 0) {
+        absolutoj = j * -1;
+      }
+      if ((absolutoi + absolutoj < figuraUNO)
+      || ((-figuraUNO / 2 - ip) * (-figuraUNO / 2 - ip) + (figuraUNO / 2 - j) * (figuraUNO / 2 - j) <= figuraUNO * figuraUNO / 2)
+      || ((-figuraUNO / 2 - ip) * (-figuraUNO / 2 - ip) + (-figuraUNO / 2 - j) * (-figuraUNO / 2 - j) <= figuraUNO * figuraUNO / 2)) {
+        cadenaFigura = cadenaFigura + "* ";
+      }
+      else {
+        cadenaFigura = cadenaFigura + ". ";
+      }
+    }
+    print(cadenaFigura);
+  }
+  print("Si la figura es un corazon <3");
+}

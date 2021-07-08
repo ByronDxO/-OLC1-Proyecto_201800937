@@ -1,0 +1,69 @@
+main(){
+    print("--------------------- CASTEOS ---------------------")
+    print("------------------ CASTEOS A INT ---------------------")
+    print((int) 25.5);
+    print((int) 'a');
+    print((int) "78");
+    print((int) 1050);                      # ERROR
+    print((int) "Hola");                    # ERROR
+    print((int) "88.59");                    # ERROR
+    print("")
+    print("------------------ CASTEOS A DOUBLE ---------------------")
+    print((double) 25);
+    print((double) 'a');
+    print((double) "25.5");
+    print((double) "100");
+    print((double) 25.5);                   # ERROR
+    print((double) "Holas");                # ERROR
+    print("")
+    print("------------------ CASTEOS A CHAR ---------------------")
+    print((char) 97);
+    print("")
+    print("------------------ CASTEOS A STRING ---------------------")
+    print((string) 97);
+    print((string) 97.6666666);
+    print((string) 97 + " Hola 1 ");        # ERROR
+    print((string) 97.6666666 + " Hola 8"); # ERROR
+    print("")
+    print("------------------ CASTEOS A BOOLEAN ---------------------")
+    print((boolean) "true");
+    print((boolean) "false");
+    print(typeof((boolean) "true"));
+    print(typeof((boolean) "false"));
+}
+
+#* SALIDA ESPERADA
+
+--------------------- CASTEOS ---------------------
+------------------ CASTEOS A INT ---------------------
+25
+97
+78
+Semantico - > Excepcion CASTEO INT: Tipo erroneo para casteo. < [7,11]
+Semantico - > Excepcion CASTEO INT: Error casteo de CADENA a INT. < [8,11]
+Semantico - > Excepcion CASTEO INT: Error casteo de CADENA a INT. < [9,11]
+
+------------------ CASTEOS A DOUBLE ---------------------
+25.0
+97.0
+25.5
+100.0
+Semantico - > Excepcion CASTEO DOUBLE: Tipo erroneo para casteo. < [16,11]
+Semantico - > Excepcion CASTEO DOUBLE: Error casteo de CADENA a DOUBLE. < [17,11]
+
+------------------ CASTEOS A CHAR ---------------------
+a
+
+------------------ CASTEOS A STRING ---------------------
+97
+97.6666666
+Semantico - > Excepcion CASTEO STRING: Tipo erroneo para casteo. < [25,11]
+Semantico - > Excepcion CASTEO STRING: Tipo erroneo para casteo. < [26,11]
+
+------------------ CASTEOS A BOOLEAN ---------------------
+true
+false
+BOOLEAN
+BOOLEAN
+
+*#

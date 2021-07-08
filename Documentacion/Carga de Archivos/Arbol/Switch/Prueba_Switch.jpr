@@ -1,0 +1,47 @@
+main(){
+    var caso = 10;
+    print("----- Switch completo -----");
+    switch(caso){
+        case 20:
+            print("Caso 20");
+	    break;
+        case 19:
+            print("Caso 19");
+	    break;
+        case 10:
+            print("Caso 11 pa\'");
+	    break;
+        default:
+	    print("No llega :)");
+    }
+
+    print("----- Switch solo Cases -----");
+    caso = 45;
+    switch(caso){
+        case 20:
+            print("Caso 20");
+	        break;
+        case 19:
+            print("Caso 19");
+	        break;
+        case 10:
+            print("Caso 11 pa\'");
+	        break;
+	    case 45:
+            print("Caso 45 mi pana");
+	        break;
+    }
+
+    print("");
+}    
+
+    
+
+    
+
+    
+
+    
+
+    
+

@@ -1,0 +1,223 @@
+# Programa de prueba para el orden del análisis sintáctico.
+
+main(){
+
+    #print("------------------------ SUMAS --------------------------")
+
+    # INT + INT = INT
+    print("25 -> " + (10 + 15))
+
+    # INT + DOUBLE = DOUBLE
+    print("35.3 -> " + (10 + 25.3))
+
+    # INT + BOOLEAN = INT
+    print("11 -> " + (10 + True))
+
+    # INT + STRING = STRING
+    print("10_cadena -> " + (10 + "_cadena"))
+
+    # DOUBLE + INT = DOUBLE
+    print("8.2 -> " + (5.2 + 3))
+
+    # DOUBLE + DOUBLE = DOUBLE
+    print("10.4 -> " + (5.2 + 5.2))
+
+    # DOUBLE + BOOLEAN = DOUBLE
+    print("5.2 -> " + (5.2 + falSE))
+
+    # DOUBLE + STRING = STRING
+    print("5.2_cadena -> " + (5.2 + "_cadena"))
+
+    # BOOLEAN + INT = INT
+    print("15 -> " + (FalsE + 15))
+
+    # BOOLEAN + DOUBLE = DOUBLE
+    print("4.4 -> " + (TrUE + 3.4))
+
+    # BOOLEAN + BOOLEAN = INT
+    print("2 -> " + (TrUe + truE))
+
+    # BOOLEAN + STRING = STRING
+    print("True_cadena -> " + (True + "_cadena"))
+
+    # CHAR + CHAR = STRING
+    print("ca -> " + ('c' + 'a'))
+
+    # CHAR + STRING = STRING
+    print("c_cadena -> " + ('c' + "_cadena"))
+
+    # STRING + INT = STRING
+    print("cadena15 -> " + ("cadena" + 15))
+
+    # STRING + DOUBLE = STRING
+    print("cadena3.14 -> " + ("cadena" + 3.14))
+
+    # STRING + BOOLEAN = STRING
+    print("cadenaFalse -> " + ("cadena" + FalSe))
+
+    # STRING + CHAR = STRING
+    print("cadena_c -> " + ("cadena_" + 'c'))
+
+    # STRING + STRING = STRING
+    print("cadena_cadena -> " + ("cadena" + "_cadena"))
+
+
+
+
+    print("------------------------ RESTAS --------------------------")
+
+    # Error
+    print(5 - 'b')
+
+    # INT - INT = INT
+    print("6 -> " + (8 - 2))
+
+    # INT - DOUBLE = DOUBLE
+    print("4.8 -> " + (8 - 3.2))
+
+    # INT - BOOLEAN = INT
+    print("7 -> " + (8 - TRUE))
+
+    # DOUBLE - INT = DOUBLE
+    print("6.2 -> " + (8.2 - 2))
+
+    # DOUBLE - DOUBLE = DOUBLE
+    print("4.8 -> " + (8.2 - 3.4))
+
+    # DOUBLE - BOOLEAN = DOUBLE
+    print("8.2 -> " + (8.2 - false))
+
+    # BOOLEAN - INT = INT
+    print("0 -> " + (tRue - 1))
+
+    # BOOLEAN - DOUBLE = DOUBLE
+    print("-2.2 -> " + (true - 3.2))
+
+
+
+    print("-------------------- MULTIPLICACIONES ------------------")
+    # ERROR
+    print(5 * 'A')
+
+    # INT * INT = INT
+    print("15 -> " + (5 * 3))
+
+    # INT * DOUBLE = DOUBLE
+    print("12.5 -> " + (5*2.5))
+
+    # DOUBLE * INT = DOUBLE
+    print("5.0 -> " + (2.5 * 2))
+
+    # DOUBLE * DOUBLE = DOUBLE
+    print("6.25 -> " + (2.5 * 2.5))
+
+
+
+
+    print("--------------------- DIVISIONES -----------------------")
+    # ERRORES
+    # DIVISIÓN ENTRE CERO
+    print(4/0)
+    print(2.2/0)
+    print(2/0.0)
+    print(2.32/0.0)
+    # DIVISION ENTRE INT Y CHAR
+    print(2 / 'C')
+
+    # INT / INT = DOUBLE
+    print("2.0 -> " + (10 / 5))
+
+    # INT / DOUBLE = DOUBLE
+    print("40.0 -> " + (100 / 2.5))
+
+    # DOUBLE / INT = DOUBLE
+    print("1.1 -> " + (8.8 / 8))
+
+    # DOUBLE / DOUBLE = DOUBLE
+    print("4.0 -> " + (8.8 / 2.2))
+
+
+
+    print("-------------------- POTENCIAS ------------------")
+    # ERROR
+    print(5 ** 'A')
+
+    # INT ** INT = INT
+    print("125 -> " + (5 ** 3))
+
+    # INT ** DOUBLE = DOUBLE
+    print("55.90169943749474 -> " + (5**2.5))
+
+    # DOUBLE ** INT = DOUBLE
+    print("6.25 -> " + (2.5 ** 2))
+
+    # DOUBLE ** DOUBLE = DOUBLE
+    print("9.882117688026186 -> " + (2.5 ** 2.5))
+
+
+
+    print("---------------------- MÓDULOS -------------------------")
+    # ERRORES
+    # DIVISIÓN ENTRE CERO
+    print(4%0)
+    print(2.2%0)
+    print(2%0.0)
+    print(2.32%0.0)
+    # DIVISION ENTRE INT Y CHAR
+    print(2 % 'C')
+
+    # INT % INT = DOUBLE
+    print("0.0 -> " + (10 % 5))
+
+    # INT % DOUBLE = DOUBLE
+    print("0.0 -> " + (100 % 2.5))
+
+    # DOUBLE % INT = DOUBLE
+    print("0.8 -> " + (8.8 % 8))
+
+    # DOUBLE % DOUBLE = DOUBLE
+    print("0.0 -> " + (8.8 % 2.2))
+
+
+
+
+
+    print("------------------- NEGACIÓN UNARIA --------------------")
+    print("-4 -> " + (- 4))
+    print("-3.2 -> " + (-3.2))
+    print("-2 -> " + (-2))
+    print("-6.7 -> " + (- 6.7))
+
+
+
+
+
+
+    print("------------------------ MEZCLADAS ---------------------")
+    # RESPUESTA = 15
+    print("15 -> " + (5 - 2 + 4 - 1 + 9))
+
+    # RESPUESTA = 7.5
+    print("7.5 -> " + (true + true + true - false + 4.5))
+
+    # RESPUESTA = 47.5
+    print("47.5 -> " + (15 * 3 - true + 2 * 3 - 2.5))
+
+    # ERROR: DIVISIÓN ENTRE CERO
+    print(15 * 3 - true + 4 / 0 + 2)
+
+    # RESPUESTA = 282.24
+
+    var exp_01 = ((13 + 2 -3) * (4 - -3) / 5)**(true + true)
+    exp_01++
+    exp_01--
+    exp_01 = 1 + exp_01++
+    exp_01 = 2 - exp_01--
+
+    # RESPUESTA = 48
+    print("48 -> " + (15 * 3 - true + 4 / 2 + 2))
+
+    # RESPUESTA = 45
+    print("45 -> " + (15 * 3 - true + 4 / (2 + 2 / 0)))
+
+}
